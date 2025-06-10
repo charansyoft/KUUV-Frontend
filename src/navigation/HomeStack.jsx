@@ -9,11 +9,11 @@ import ChatsStack from "./ChatStack";
 import GroupsStack from "./GroupsStack";
 import ShoutsPage from "../pages/shouts/ShoutsPage";
 import ShoutsStack from "./ShoutsStack";
-
+import { useAppTheme } from "../../themeContext";
 const Tab = createMaterialTopTabNavigator(); // Changed
 
 export default function HomeStack() {
-
+const { theme } = useAppTheme();
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -23,18 +23,18 @@ export default function HomeStack() {
         swipeEnabled: true, // enable swipe gestures
         tabBarShowLabel: true,
         tabBarStyle: {
-          backgroundColor: "#000",
+          backgroundColor: theme.BackGround,
           height: 110,
           borderTopWidth: 0.2,
           paddingTop: 5,
-          borderTopColor: "#000",
+          borderTopColor: theme.LineColor,
           elevation: 5, // for shadow on Android
         },
         tabBarIndicatorStyle: {
-          backgroundColor: "rgba(255, 255, 255, 0.5)",
+          backgroundColor: theme.LineColor,
           height: 0,
-          marginBottom: 0,
-          borderRadius: 0,
+          marginBottom: 2,
+          borderRadius: 50,
           width: 34,
           marginLeft: (() => {
             // To center indicator under icon/text
@@ -72,9 +72,9 @@ export default function HomeStack() {
           return (
             <Icon
               name={iconName}
-              size={24}
+              size={25}
               color={
-                focused ? "#000" : "#000"
+                focused ? theme.SpecialBackGround : theme.Icon
               }
             />
           );
@@ -82,10 +82,10 @@ export default function HomeStack() {
         tabBarLabel: ({ focused }) => (
           <Text
             style={{
-              fontSize: 12,
+              fontSize: 13,
               color: focused
-                ? "#000"
-                : "#000",
+                ? theme.SpecialBackGround
+                : theme.ModeText1,
               fontFamily: "System",
               marginBottom:0,
             }}

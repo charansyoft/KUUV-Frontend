@@ -2,11 +2,12 @@ import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { useAppTheme } from "../../../../themeContext";
 
 const SelectOtherCity = ({ locationInfo }) => {
   const navigation = useNavigation();
   console.log("SELECTOTHERLOCATION:",locationInfo.state)
-
+  const { theme } = useAppTheme();
   const handlePress = () => {
     // Navigate to AskCity and pass locationInfo as a parameter
     navigation.navigate("AskCity", { locationInfo: locationInfo.state });
@@ -18,7 +19,7 @@ const SelectOtherCity = ({ locationInfo }) => {
       style={{
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#000",
+        backgroundColor: theme.SpecialBackGround,
         paddingVertical: 12,
         paddingHorizontal: 16,
         borderRadius: 30,
@@ -26,7 +27,7 @@ const SelectOtherCity = ({ locationInfo }) => {
     >
       <Text
         style={{
-          color: "#000000",
+          color: "black",
           fontSize: 14,
           fontWeight: "500",
           marginRight: 5,
@@ -34,7 +35,7 @@ const SelectOtherCity = ({ locationInfo }) => {
       >
         Select Other City
       </Text>
-      <Feather name="chevron-right" size={20} color="#000000" />
+      <Feather name="chevron-right" size={20} color={"black"} />
     </TouchableOpacity>
   );
 };

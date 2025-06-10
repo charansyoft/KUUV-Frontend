@@ -4,12 +4,12 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useSelector } from "react-redux";
 import useGetJoinedGroupsByPhone from "../../../api/home/useGetJoinedGroupsByPhone";
 import { useNavigation } from "@react-navigation/native";
-
+import { useAppTheme } from "../../../../themeContext";
 export default function JoinedGroupsList({ searchText }) {
   const navigation = useNavigation();
   const phoneNumber = useSelector((state) => state.user.phone);
   const { apiGroups, loading, error } = useGetJoinedGroupsByPhone(phoneNumber);
-
+  const {theme} = useAppTheme();
   const filteredApiGroups = apiGroups.filter((group) =>
     group.name?.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -29,7 +29,7 @@ export default function JoinedGroupsList({ searchText }) {
   }
 
 return (
-  <View style={{ padding: 15, backgroundColor: "#000" }}>
+  <View style={{ padding: 15, backgroundColor: theme.BackGround }}>
     {/* Commenting ScrollView temporarily */}
     {/* <ScrollView> */}
       {filteredApiGroups.map((group) => (
@@ -38,11 +38,11 @@ return (
           style={{
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.14)",
+            backgroundColor: theme.BackGround,
             borderRadius: 20,
             padding: 12,
             borderWidth: 0.5,
-            borderColor: "#000",
+            borderColor: theme.LineColor,
             marginBottom: 10,
           }}
           onPress={() => {
@@ -68,19 +68,18 @@ return (
           <View style={{ flex: 1 }}>
             <Text
               style={{
-                color: "#000",
+                color:theme.ModeText1,
                 fontSize: 16,
-                fontWeight: "600",
+                fontWeight: "500",
               }}
             >
               {group.name}
             </Text>
             <Text
               style={{
-                color: "#000",
+                color: theme.ModeText3,
                 fontSize: 14,
                 marginTop: 4,
-                opacity: 0.8,
               }}
             >
               {group.joinedUsers?.length > 10
@@ -92,7 +91,7 @@ return (
           <Icon
             name="chevron-right"
             size={28}
-            color={"#000"}
+            color={theme.Icon}
             style={{ marginLeft: 8 }}
           />
         </TouchableOpacity>

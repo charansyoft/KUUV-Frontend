@@ -8,12 +8,13 @@ import ScrollContent from "./components/ScrollContent";
 import { useSelector } from "react-redux";
 import useFetchGroupsMutation from "../../api/Location/useFetchGroupsMutaion";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAppTheme } from "../../../themeContext";
 export default function GroupSelection() {
   const navigation = useNavigation();
   const route = useRoute();
   const { locationInfo } = route.params || {};
   const phone = useSelector((state) => state.user.phone);
-
+  const { theme } = useAppTheme();
   const { fetchedGroups, loading, userId } = useFetchGroupsMutation(
     locationInfo,
     phone
@@ -62,7 +63,7 @@ export default function GroupSelection() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000", padding: 20 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.BackGround, padding: 20 }}>
       <View
         style={{
           flexDirection: "row",
@@ -80,16 +81,18 @@ export default function GroupSelection() {
       <View
         style={{
           flex: 1,
-          borderRadius: 15,
-          backgroundColor: "rgba(255, 255, 255, 0.18)", // subtle lighter transparent for dark
+          borderRadius:20,
+          backgroundColor:"rgba(173, 173, 173, 0.3)", // subtle lighter transparent for dark
           paddingTop: 30,
           marginHorizontal: 0,
           marginBottom: 15,
+          borderWidth:1,
+          borderColor:theme.LineColor
         }}
       >
         <Text
           style={{
-            color: "#000", // lighter text for dark theme
+            color: theme.ModeText1, // lighter text for dark theme
             fontSize: 25,
             fontWeight: "500",
             textAlign: "center",
@@ -102,7 +105,7 @@ export default function GroupSelection() {
 
         <Text
           style={{
-            color: "#000",
+            color: theme.ModeText3,
             fontSize: 15,
             textAlign: "center",
             marginBottom: 15,
@@ -113,7 +116,7 @@ export default function GroupSelection() {
 
         <Text
           style={{
-            color: "#fff",
+            color: theme.ModeText1,
             fontSize: 14,
             fontWeight: "500",
             marginBottom: 10,

@@ -9,18 +9,17 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import { useGetGroupDetailsByGroupId } from '../../api/chats/groupChats/getGroupDetailsByGroupIdMutation';
 import { useSelector } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useLeaveGroupMutation } from '../../api/chats/groupChats/useLeaveGroupMutation';
-
+import { useAppTheme } from '../../../themeContext';
 export default function GroupChatHeader({ GroupId }) {
   const { mutate, data, isLoading, isError, error } = useGetGroupDetailsByGroupId();
   const phone = useSelector((state) => state.user.phone);
   const [showModal, setShowModal] = useState(false);
 const { mutate: leaveGroup, isLoading: isLeaving } = useLeaveGroupMutation();
-
+  const { theme } = useAppTheme();
   useEffect(() => {
     if (GroupId) {
       mutate({ GroupId });
@@ -66,7 +65,7 @@ const handleConfirmLeave = () => {
 };
 
   return (
-    <View style={{ backgroundColor:"#000" }}>
+    <View style={{ backgroundColor:theme.BackGround }}>
       <View
         style={{
           margin: 15,
@@ -74,8 +73,7 @@ const handleConfirmLeave = () => {
           padding: 10,
           borderWidth: 1,
           borderRadius: 15,
-          borderColor: 'rgba(255, 255, 255, 0.18)',
-          backgroundColor: 'rgba(255, 255, 255, 0.13)',
+          borderColor: theme.LineColor,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -105,7 +103,7 @@ const handleConfirmLeave = () => {
                 marginRight: 12,
               }}
             >
-              <Text style={{ fontSize: 18, color: "#000" }}>G</Text>
+              <Text style={{ fontSize: 18, color: "#000" }}>?</Text>
             </View>
           )}
 
@@ -114,7 +112,7 @@ const handleConfirmLeave = () => {
               style={{
                 fontSize: 18,
                 fontWeight: 'bold',
-                color: "#000",
+                color: theme.ModeText1,
                 marginBottom: 2,
               }}
               numberOfLines={1}
@@ -123,7 +121,7 @@ const handleConfirmLeave = () => {
               {group?.name || 'Group'}
             </Text>
 
-            <Text style={{ fontSize: 13, color:"#000" }}>
+            <Text style={{ fontSize: 13, color:theme.ModeText1 }}>
               {group?.location} • {group?.joinedUsers?.length || 0} members
             </Text>
           </View>
@@ -131,7 +129,7 @@ const handleConfirmLeave = () => {
 
         {/* Right Side Buttons */}
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {!isJoined && (
+          {/* {!isJoined && (
             <TouchableOpacity
               onPress={() => console.log('Join group clicked')}
               style={{
@@ -145,14 +143,14 @@ const handleConfirmLeave = () => {
             >
               <MaterialIcons name="add" size={25} color="black" />
             </TouchableOpacity>
-          )}
+          )} */}
 
           {/* Exit Button */}
           {isJoined && (
             <TouchableOpacity
               onPress={() => setShowModal(true)}
               style={{
-                backgroundColor: '#FFB0B0',
+                backgroundColor: theme.Exit,
                 padding: 8,
                 borderRadius: 100,
                 justifyContent: 'center',
@@ -221,11 +219,11 @@ const handleConfirmLeave = () => {
             padding: 12,
             borderRadius: 12,
             borderWidth: 1,
-            borderColor: '#aaa',
+            borderColor: theme.LineColor,
             alignItems: 'center',
           }}
         >
-          <Text style={{ fontSize: 16, color: '#333' }}>Cancel</Text>
+          <Text style={{ fontSize: 16, color:theme.ModeText1 }}>Cancel</Text>
         </Pressable>
 
         <Pressable

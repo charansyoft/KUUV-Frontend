@@ -1,6 +1,7 @@
 import React from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, TextInput } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { useAppTheme } from "../../../themeContext";
 
 export default function SearchField({
   value = '',
@@ -10,44 +11,40 @@ export default function SearchField({
   containerStyle = {},
   ...rest
 }) {
+  const { theme } = useAppTheme();
 
   return (
-    <View style={[styles.container("#000"), containerStyle]}>
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: theme.BackGround,
+        paddingHorizontal: 10,
+        height: 45,
+        borderRadius: 15,
+        ...containerStyle,
+      }}
+    >
       <Feather
         name="search"
         size={20}
-        color="#000"
-        style={styles.icon}
+        color={theme.Icon}
+        style={{ marginRight: 8, opacity: 0.5 }}
       />
       <TextInput
-        style={[styles.textField("#000"), style]}
+        style={{
+          flex: 1,
+          fontSize: 16,
+          color: theme.ModeText1,
+          paddingVertical: 0,
+          ...style,
+        }}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={"#000" || "#aaa"}
+        placeholderTextColor={theme.ModeText3}
         {...rest}
       />
     </View>
   );
 }
-
-const styles = {
-  container: () => ({
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#000",
-    paddingHorizontal: 10,
-    height: 45,
-    borderRadius: 15,
-  }),
-  icon: {
-    marginRight: 8,
-    opacity: 0.5,
-  },
-  textField: () => ({
-    flex: 1,
-    fontSize: 16,
-    color: "#000",
-    paddingVertical: 0, // avoid overflow in Android
-  }),
-};

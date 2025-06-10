@@ -9,8 +9,9 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons"; // Using Feather instead of MUI icons for React Native
-
+import { useAppTheme } from "../../../themeContext";
 const AskCity = ({ route }) => {
+  const { theme } = useAppTheme();
   const { locationInfo } = route.params;
   const navigation = useNavigation();
   const [states, setStates] = useState([]);
@@ -88,7 +89,7 @@ const AskCity = ({ route }) => {
         padding: 20,
         paddingVertical:50,
         paddingBottom:60,
-        backgroundColor: "#000",
+        backgroundColor: theme.BackGround,
       }}
     >
       {/* Search bar */}
@@ -97,7 +98,7 @@ const AskCity = ({ route }) => {
           flexDirection: "row",
           alignItems: "center",
           width: "100%",
-          backgroundColor:"#000",
+          // backgroundColor:theme.ModeText3,
           borderRadius: 20,
           paddingHorizontal: 10,
           paddingVertical: 5,
@@ -109,7 +110,7 @@ const AskCity = ({ route }) => {
             flexDirection: "row",
             alignItems: "center",
             borderWidth: 1,
-            borderColor: "#000",
+            borderColor: theme.LineColor,
             borderRadius: 20,
             flex: 1,
             paddingLeft: 10,
@@ -117,25 +118,25 @@ const AskCity = ({ route }) => {
             opacity: 0.6,
           }}
         >
-          <Feather name="search" size={20} color={"#000"} />
+          <Feather name="search" size={20} color={theme.Icon} />
           <TextInput
             style={{
               flex: 1,
               padding: 10,
-              color: "#fff",
+              color:theme.ModeText1,
               fontSize: 16,
               outlineStyle: "none",
               outlineColor: "transparent",
               outlineWidth: 0,
             }}
             placeholder="Search for City"
-            placeholderTextColor="#ccc"
+            placeholderTextColor={theme.ModeText3}
             value={searchTerm}
             onChangeText={handleSearch}
           />
         </View>
         <TouchableOpacity onPress={handleCancelSearch}>
-          <Text style={{ marginLeft: 10, color: "#000", fontSize: 16 }}>
+          <Text style={{ marginLeft: 10, color: theme.ModeText1, fontSize: 16 }}>
             Cancel
           </Text>
         </TouchableOpacity>
@@ -167,12 +168,12 @@ const AskCity = ({ route }) => {
                   flexDirection: "row",
                   alignItems: "center",
                   padding: 10,
-                  backgroundColor:"#000",
+                  backgroundColor:theme.BackGround,
                   marginBottom: 10,
                   justifyContent: "space-between",
                   borderBottomWidth:
                     index === filteredCities.length - 1 ? 0 : 1,
-                  borderBottomColor: "#000",
+                  borderBottomColor: theme.LineColor,
                 }}
               >
                 <View
@@ -183,14 +184,14 @@ const AskCity = ({ route }) => {
                     marginRight: 15,
                     justifyContent: "center",
                     alignItems: "center",
-                    backgroundColor: "#000",
+                    backgroundColor: theme.BackGround,
                   }}
                 >
                   <Text style={{ paddingBottom: 5 }}>🇮🇳</Text>
                 </View>
                 <Text
                   style={{
-                    color: "#000",
+                    color: theme.ModeText1,
                     fontSize: 18,
                     flex: 1,
                     textAlign: "left",
@@ -198,17 +199,17 @@ const AskCity = ({ route }) => {
                 >
                   {item.name}
                 </Text>
-                <Feather name="chevron-right" size={22} color={"#000"} />
+                <Feather name="chevron-right" size={22} color={theme.Icon} />
               </TouchableOpacity>
             )}
           />
         ) : (
-          <Text style={{ fontSize: 18, color:"#000", marginTop: 20 }}>
+          <Text style={{ fontSize: 18, color:theme.ModeText1, marginTop: 20 }}>
             No cities found
           </Text>
         )
       ) : (
-        <Text style={{ fontSize: 18, color: "#000", marginTop: 20 }}>
+        <Text style={{ fontSize: 18, color: theme.ModeText1, marginTop: 20 }}>
           State not found in the list
         </Text>
       )}

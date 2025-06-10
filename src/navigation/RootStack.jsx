@@ -107,7 +107,16 @@ export default function RootStack() {
         <Stack.Screen name="auth-verify-otp" component={VerifyOtpPage} />
         <Stack.Screen name="AskLocation" component={AskLocation} />
         <Stack.Screen name="AskCity" component={AskCity} />
-        <Stack.Screen name="GroupSelection" component={GroupSelection} />
+<Stack.Screen
+  name="GroupSelection"
+  component={GroupSelection}
+  options={{
+    gestureEnabled: false, // 🔒 disables swipe-back
+    headerShown: false,
+    animationEnabled: true,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  }}
+/>
         <Stack.Screen name="home-stack" component={HomeStack} />
         {/* <Stack.Screen name="group-details" component={GroupDetailsPage} /> */}
       </Stack.Navigator>

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { CountryPicker } from "react-native-country-codes-picker";
 import { Feather } from "@expo/vector-icons";
-
+import { useAppTheme } from "../../../../../themeContext"
 const { width, height } = Dimensions.get("window");
 
 // Utility function to scale font sizes based on screen width
@@ -22,6 +22,7 @@ export default function NumberVerification({
   dropdownOpen,
   setDropdownOpen,
 }) {
+  const { theme } = useAppTheme();
 
   return (
     <>
@@ -29,7 +30,7 @@ export default function NumberVerification({
         style={{
           padding: width * 0.014, // ~7 on 375 width device
           borderRadius: 50,
-          backgroundColor: "#000",
+          backgroundColor: "rgba(0, 0, 0, 0.10)",
           marginTop: height * 0.03,
         }}
       >
@@ -39,7 +40,7 @@ export default function NumberVerification({
               flexDirection: "row",
               alignItems: "center",
               width: "auto",
-              backgroundColor: "#000",
+              backgroundColor: theme.LineColor,
               borderRadius: 50,
               paddingVertical: height * 0.018, // ~15 on 680 height device
               paddingHorizontal: width * 0.025, // ~10 on 375 width device
@@ -48,7 +49,7 @@ export default function NumberVerification({
           >
             <Text
               style={{
-                color: "#000",
+                color: theme.ModeText2,
                 marginLeft: 0,
                 fontWeight: "400",
                 fontSize: scaleFont(16),
@@ -58,7 +59,7 @@ export default function NumberVerification({
             </Text>
             <Text
               style={{
-                color: "#000",
+                color: theme.ModeText2,
                 marginLeft: 7,
                 fontWeight: "400",
                 fontSize: scaleFont(16),
@@ -69,14 +70,14 @@ export default function NumberVerification({
             <Feather
               name="chevron-down"
               size={scaleFont(18)}
-              color={"#000"}
+              color={theme.ModeText2}
               style={{ marginLeft: 6 }}
             />
           </TouchableOpacity>
 
           <TextInput
             placeholder="Enter your mobile number"
-            placeholderTextColor={"#000"}
+            placeholderTextColor={theme.ModeText3}
             value={phoneNumber}
             onChangeText={(text) => {
               // Remove all non-digit characters from input
@@ -88,7 +89,7 @@ export default function NumberVerification({
             keyboardType="number-pad" // still useful for mobile
             style={{
               flex: 1,
-              color: "#000",
+              color: theme.ModeText1,
               fontSize: phoneNumber.length > 0 ? scaleFont(18) : scaleFont(16),
               paddingLeft: 12,
               borderWidth: 0,
@@ -103,19 +104,19 @@ export default function NumberVerification({
         lang="en"
         style={{
           modal: {
-            backgroundColor: "#000",
+            backgroundColor: theme.BackGround,
             height: height * 0.6,
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             paddingBottom: 20,
           },
           backdrop: {
-            backgroundColor: "#000",
+            backgroundColor: "#fff",
           },
           textInput: {
-            color: "#000",
+            color: theme.ModeText1,
             borderColor: "transparent",
-            backgroundColor: "#000",
+            backgroundColor: theme.BackGround,
             fontSize: scaleFont(16),
           },
           dialCode: {
@@ -123,16 +124,16 @@ export default function NumberVerification({
             fontSize: scaleFont(16),
           },
           countryName: {
-            color: "#000",
+            color: theme.ModeText1,
             fontSize: scaleFont(16),
           },
           countryCode: {
-            color: "#000",
+            color: theme.ModeText1,
             fontSize: scaleFont(16),
           },
           countryButtonStyles: {
-            backgroundColor: "#000",
-            borderBottomColor: "#000",
+            backgroundColor: theme.BackGround,
+            borderBottomColor: theme.LineColor,
             borderBottomWidth: 1,
             paddingVertical: height * 0.015,
             paddingHorizontal: width * 0.03,
@@ -151,7 +152,7 @@ export default function NumberVerification({
           setDropdownOpen(false);
         }}
         inputPlaceholder="Search country or code"
-        inputPlaceholderTextColor={"#000"}
+        inputPlaceholderTextColor={theme.ModeText3}
         onBackdropPress={() => setDropdownOpen(false)}
         onRequestClose={() => setDropdownOpen(false)}
       />

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { Animated, Text, View, Keyboard } from "react-native";
-
+import { useAppTheme } from "../../../../../themeContext";
 import NextButton from "../Buttons/NextButton";
 
 export default function VerifyOtpPageFooter({
@@ -10,7 +10,7 @@ export default function VerifyOtpPageFooter({
   isButtonEnabled,
 }) {
   const footerAnim = useRef(new Animated.Value(0)).current;
-
+  const { theme } = useAppTheme();
   useEffect(() => {
     const show = Keyboard.addListener("keyboardDidShow", (e) => {
       Animated.timing(footerAnim, {
@@ -55,7 +55,7 @@ export default function VerifyOtpPageFooter({
           style={{
             flex: 1,
             fontSize: 14,
-            color: "#000",
+            color: theme.ModeText1,
             lineHeight: 18,
           }}
         >
@@ -64,7 +64,7 @@ export default function VerifyOtpPageFooter({
             onPress={countdown === 0 ? onResend : null}
             style={{
               color:
-                countdown === 0 ? "#000" : "#000",
+                countdown === 0 ?  theme.SpecialText : theme.ModeText1,
               fontWeight: countdown === 0 ? "500" : "normal",
             }}
           >

@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import useGetGroupsByCity from "../../../api/home/useGetGroupsByCity";
 import { useNavigation } from "@react-navigation/native"; // ✅ ADD THIS
-
+import { useAppTheme } from "../../../../themeContext";
 export default function SuggestedGroups() {
   const navigation = useNavigation(); // ✅ ADD THIS
-
+  const { theme }= useAppTheme();
   const addresses = useSelector(
     (state) => state.userSelectedAddress?.addresses || []
   );
@@ -27,8 +27,8 @@ export default function SuggestedGroups() {
         borderRadius: 20,
         overflow: "hidden",
         borderWidth: 0.5,
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        borderColor: "#ccc",
+        backgroundColor: theme.BackGround,
+        borderColor:theme.LineColor,
       }}
       onPress={() => {
         // console.log("ITEMMMMMM", item.id);
@@ -44,15 +44,14 @@ export default function SuggestedGroups() {
         style={{ width: "100%", height: 100 }}
       />
       <View style={{ padding: 10 }}>
-        <Text style={{ fontWeight: "600", color: "#000" }}>
+        <Text style={{ fontWeight: "600", color: theme.ModeText1 }}>
           {item.name}
         </Text>
         <Text
           style={{
             fontSize: 12,
-            opacity: 0.6,
             marginTop: 2,
-            color: "#000",
+            color: theme.ModeText3,
           }}
         >
           {item.members}
@@ -63,11 +62,11 @@ export default function SuggestedGroups() {
 
   if (isLoading)
     return (
-      <Text style={{ color: "#000", marginLeft: 15 }}>Loading...</Text>
+      <Text style={{ color: theme.ModeText1, marginLeft: 15 }}>Loading...</Text>
     );
   if (error)
     return (
-      <Text style={{ color: "#000", marginLeft: 15 }}>
+      <Text style={{ color:  theme.ModeText1, marginLeft: 15 }}>
         Error loading groups
       </Text>
     );
@@ -78,11 +77,10 @@ export default function SuggestedGroups() {
         style={{
           fontSize: 18,
           fontWeight: "400",
-          opacity: 0.6,
           marginTop: 5,
           marginBottom: 10,
           marginLeft: 15,
-          color: "#000",
+          color:  theme.ModeText1,
         }}
       >
         Suggested Groups

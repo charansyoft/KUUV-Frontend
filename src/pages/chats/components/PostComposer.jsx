@@ -6,23 +6,21 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
-  StyleSheet,
   ScrollView,
-  Platform,
   Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from "axios";
-
+import { useAppTheme } from "../../../../themeContext"
 const { width } = Dimensions.get("window");
 
 const PostComposer = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { GroupId } = route.params;
-
+  const { theme } = useAppTheme();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
@@ -31,8 +29,7 @@ const PostComposer = () => {
   const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
       alert("Permission to access camera roll is required!");
       return;
@@ -93,148 +90,174 @@ const PostComposer = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Create Post</Text>
+    <ScrollView
+      contentContainerStyle={{
+        padding: 16,
+        paddingTop: "40%",
+        backgroundColor: theme.BackGround,
+        flexGrow: 1,
+        width: "100%",
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 22,
+          fontWeight: "600",
+          marginBottom: 16,
+          textAlign: "center",
+        }}
+      >
+        Create Post
+      </Text>
 
       <TextInput
-        style={styles.input}
+        style={{
+          backgroundColor: theme.ModeText3,
+          borderRadius: 10,
+          padding: 14,
+          marginBottom: 14,
+          borderWidth: 1,
+          borderColor: theme.LineColor,
+          fontSize: 16,
+        }}
         placeholder="Post Title"
         value={name}
         onChangeText={setName}
       />
 
       <TextInput
-        style={[styles.input, styles.textArea]}
+        style={{
+          backgroundColor: theme.ModeText3,
+          borderRadius: 10,
+          padding: 14,
+          marginBottom: 14,
+          borderWidth: 1,
+          borderColor: theme.LineColor,
+          fontSize: 16,
+          height: 100,
+          textAlignVertical: "top",
+        }}
         placeholder="Description"
         value={description}
         onChangeText={setDescription}
         multiline
       />
 
-      <View style={styles.row}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: 14,
+        }}
+      >
         <TouchableOpacity
-          style={styles.priceButton}
+          style={{
+            backgroundColor:theme.LineColor,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 8,
+          }}
           onPress={() => setPrice(Math.max(0, price - 1))}
         >
-          <Text style={styles.buttonText}>-</Text>
+          <Text style={{ fontSize: 20 }}>-</Text>
         </TouchableOpacity>
-        <Text style={styles.price}>{price}</Text>
+        <Text
+          style={{
+            marginHorizontal: 20,
+            fontSize: 18,
+            fontWeight: "bold",
+          }}
+        >
+          {price}
+        </Text>
         <TouchableOpacity
-          style={styles.priceButton}
+          style={{
+            backgroundColor: theme.LineColor,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 8,
+          }}
           onPress={() => setPrice(price + 1)}
         >
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={{ fontSize: 20 }}>+</Text>
         </TouchableOpacity>
       </View>
 
       <TextInput
-        style={styles.input}
+        style={{
+          backgroundColor: theme.ModeText3,
+          borderRadius: 10,
+          padding: 14,
+          marginBottom: 14,
+          borderWidth: 1,
+          borderColor: theme.LineColor,
+          fontSize: 16,
+        }}
         placeholder="Price Period (e.g., day, week, month)"
         value={period}
         onChangeText={setPeriod}
       />
 
-      <View style={styles.imageRow}>
-        <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
-          <Text style={styles.imagePickerText}>Select Image</Text>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <TouchableOpacity
+          onPress={pickImage}
+          style={{
+            backgroundColor: theme.ModeText1,
+            borderRadius: 10,
+            padding: 14,
+            alignItems: "center",
+            marginBottom: 16,
+            borderWidth: 1,
+            borderColor: theme.LineColor,
+          }}
+        >
+          <Text style={{ color: theme.ModeText2, fontWeight: "500" }}>
+            Select Image
+          </Text>
         </TouchableOpacity>
 
         {image && (
-          <Image source={{ uri: image.uri }} style={styles.imageThumbnail} />
+          <Image
+            source={{ uri: image.uri }}
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 10,
+              marginLeft: 12,
+              // borderWidth:1,
+              // borderColor:"#fff"
+            }}
+          />
         )}
       </View>
 
       <TouchableOpacity
-        style={[styles.submitButton, loading && { backgroundColor: "#aaa" }]}
+        style={{
+          backgroundColor: loading ? "#aaa" : theme.ModeText1,
+          padding: 16,
+          borderRadius: 12,
+          alignItems: "center",
+        }}
         onPress={handleSubmit}
         disabled={loading}
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.submitText}>Upload Post</Text>
+          <Text
+            style={{
+              color: theme.ModeText2,
+              fontSize: 16,
+              fontWeight: "600",
+            }}
+          >
+            Upload Post
+          </Text>
         )}
       </TouchableOpacity>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    marginTop: 150,
-    backgroundColor: "#f9f9f9",
-    flexGrow: 1,
-    width: "100%",
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: "600",
-    marginBottom: 16,
-    textAlign: "center",
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 14,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    fontSize: 16,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 14,
-  },
-  priceButton: {
-    backgroundColor: "#e0e0e0",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  price: {
-    marginHorizontal: 20,
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  imagePicker: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 14,
-    alignItems: "center",
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#ccc",
-  },
-  imagePickerText: {
-    color: "#007bff",
-    fontWeight: "500",
-  },
-  imagePreview: {
-    width: width - 32,
-    height: 200,
-    marginBottom: 16,
-    borderRadius: 10,
-    resizeMode: "cover",
-    alignSelf: "center",
-  },
-  submitButton: {
-    backgroundColor: "#007bff",
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  submitText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
 
 export default PostComposer;

@@ -10,6 +10,7 @@ export const themes = {
     Icon: "#000000",
     SpecialBackGround: "#B0B5FF",
     SpecialText: "#B0B5FF",
+    Exit: "#FFB0B0",
   },
   dark: {
     BackGround: "#000000",
@@ -20,5 +21,6 @@ export const themes = {
     Icon: "#ffffff",
     SpecialBackGround: "#B0B5FF",
     SpecialText: "#B0B5FF",
+    Exit: "#FFB0B0",
   },
 };

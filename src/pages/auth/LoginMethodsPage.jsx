@@ -46,7 +46,7 @@ const { theme } = useAppTheme();
             width: "70%",
           }}
         >
-          <View style={{ flex: 1, height: 1, backgroundColor: theme.ModeText3 }} />
+          <View style={{ flex: 1, height: 1, backgroundColor: theme.ModeText1 }} />
           <Text
             variant="bodyMedium"
             style={{
@@ -57,7 +57,7 @@ const { theme } = useAppTheme();
           >
             or
           </Text>
-          <View style={{ flex: 1, height: 1, backgroundColor: theme.ModeText3 }} />
+          <View style={{ flex: 1, height: 1, backgroundColor: theme.ModeText1 }} />
         </View>
 
         <View

@@ -4,13 +4,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
+import { useAppTheme } from "../../../../themeContext";
 export default function PersonalChatHeader() {
   const route = useRoute();
   const opponent = route.params?.opponentId;
   const [opponentDetails, setOpponentDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const { theme } = useAppTheme();
   const shimmerOpacity = new Animated.Value(0.3);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function PersonalChatHeader() {
 
   if (loading) {
     return (
-      <View style={{ marginTop: 35, padding: 10, backgroundColor: "#000" }}>
+      <View style={{ marginTop: 35, padding: 10, backgroundColor: theme.BackGround }}>
         <View
           style={{
             padding: 10,
@@ -65,7 +65,7 @@ export default function PersonalChatHeader() {
             flexDirection: "row",
             alignItems: "center",
             backgroundColor: "#111",
-            borderColor: "rgba(255, 255, 255, 0.1)",
+            borderColor: theme.LineColor,
             borderWidth: 1,
           }}
         >
@@ -117,16 +117,16 @@ export default function PersonalChatHeader() {
   }
 
   return (
-    <View style={{ marginTop: 35, padding: 10, backgroundColor: "#000" }}>
+    <View style={{ marginTop: 35, padding: 10, backgroundColor: theme.BackGround }}>
       <View
         style={{
           padding: 10,
           borderRadius: 20,
           flexDirection: "row",
           alignItems: "center",
-          borderColor: "rgba(255, 255, 255, 0.41)",
+          borderColor: theme.LineColor,
           borderWidth: 1,
-          backgroundColor: "#000",
+          backgroundColor:theme.BackGround,
         }}
       >
         {opponentDetails?.profilePic ? (
@@ -156,10 +156,10 @@ export default function PersonalChatHeader() {
         )}
 
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 16, fontWeight: "600", color: "#fff" }}>
+          <Text style={{ fontSize: 16, fontWeight: "600", color: theme.ModeText1 }}>
             {opponentDetails?.name || opponentDetails?.phone || "Unknown"}
           </Text>
-          <Text style={{ fontSize: 13, color: "#aaa", marginTop: 2 }}>
+          <Text style={{ fontSize: 13, color: theme.ModeText3, marginTop: 2 }}>
             Role: {opponentDetails?.role || "N/A"}
           </Text>
 

@@ -4,11 +4,11 @@ import { Text } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import useCreateChatMutation from "../../../api/chats/personalChats/useCreateChatMutation";
-
+import { useAppTheme } from "../../../../themeContext";
 export default function ProfilePopup({ visible, onClose, userId }) {
   const navigation = useNavigation();
   const createChatMutation = useCreateChatMutation();
-
+  const { theme } = useAppTheme();
   const handleViewProfile = () => {
     onClose(); // Close modal
     navigation.navigate("ViewProfile", { userId }); // Navigate to profile screen

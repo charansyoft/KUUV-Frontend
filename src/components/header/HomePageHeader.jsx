@@ -3,9 +3,9 @@ import { View, Text } from "react-native";
 import NotificationsIcon from "./components/NotificationsIcon";
 import StartChatIcon from "./components/StartChatIcon";
 import SearchLocation from "./components/SearchLocation";
-
+import { useAppTheme } from "../../../themeContext";
 export default function HomePageHeader() {
-
+  const { theme } = useAppTheme();
   return (
     <View
       style={{
@@ -13,9 +13,9 @@ export default function HomePageHeader() {
         paddingTop: 40,
         justifyContent: "center",
         paddingHorizontal: 20,
-        backgroundColor: "#000",
+        backgroundColor: theme.BackGround,
         borderBottomWidth: 0,
-        borderBottomColor: "#000" || "#ccc",
+        borderBottomColor: theme.LineColor,
       }}
     >
       <View
@@ -34,8 +34,8 @@ export default function HomePageHeader() {
               marginLeft: 12,
               fontSize: 20,
               fontWeight: "bold",
-              color: "#000",
-fontFamily: "Poppins",  // if you're using Poppins
+              color: theme.ModeText1,
+              fontFamily: "Poppins", // if you're using Poppins
               letterSpacing: 1,
             }}
           >

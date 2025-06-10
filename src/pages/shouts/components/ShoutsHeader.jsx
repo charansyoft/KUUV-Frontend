@@ -1,26 +1,31 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
+import { useAppTheme } from "../../../../themeContext";
 
 export default function ShoutsHeader() {
+  const { theme } = useAppTheme();
 
   return (
-    <View style={[styles.header, { backgroundColor: "#000" }]}>
-      <Text style={[styles.title, { color: "#000" }]}>Shouts</Text>
+    <View
+      style={{
+        height: 100,
+        backgroundColor: theme.BackGround,
+        justifyContent: "center",     // vertical center
+        alignItems: "center",         // horizontal center
+      }}
+    >
+      <Text
+        style={{
+          color: theme.ModeText1,
+          fontSize: 20,
+          fontWeight: "bold",
+          fontFamily: "Poppins",
+          textAlign: "center", 
+          paddingTop:30,        // ensures horizontal text alignment if multiline
+        }}
+      >
+        Shouts
+      </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-    // borderBottomWidth: 1,
-    // borderBottomColor: "#ccc",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "Poppins",
-  },
-});

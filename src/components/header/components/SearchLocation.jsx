@@ -5,8 +5,9 @@ import { useDispatch } from "react-redux";
 import { openModal } from "../../../redux/modalsSlice";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-
+import { useAppTheme } from "../../../../themeContext";
 export default function SearchLocation() {
+  const { theme } = useAppTheme();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const selectedLocation = useSelector(
@@ -28,17 +29,17 @@ export default function SearchLocation() {
       style={{
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#000",
+        // backgroundColor: theme.ModeText3,
         padding: 5,
-        borderRadius: 8,
+        borderRadius: 50,
         width: 180,
       }}
       onPress={handlePress}
     >
-      <Ionicons name="location-outline" size={24} color={"#000"} />
+      <Ionicons name="location-outline" size={24} color={theme.Icon} />
       <Text
         style={{
-          color: "#000",
+          color: theme.ModeText1,
           marginLeft: 6,
           fontSize: 18,
         }}

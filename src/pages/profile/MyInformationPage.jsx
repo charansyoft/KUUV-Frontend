@@ -11,13 +11,13 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useFetchUserProfileMutation } from "../../api/useFetchUserProfileMutation";
 import UserPosts from "./components/UserPosts";
-
+import { useAppTheme } from "../../../themeContext";
 export default function MyInformationPage() {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const { theme } = useAppTheme();
   // Create a function to load user profile data
   const loadUserProfile = useCallback(async () => {
     setLoading(true);
@@ -36,12 +36,12 @@ export default function MyInformationPage() {
   );
 
   return (
-    <ScrollView style={{ backgroundColor:"#000", flex: 1 }}>
-      <View style={{ backgroundColor: "#000", flex: 1 }}>
+    <ScrollView style={{ backgroundColor:theme.BackGround, flex: 1 }}>
+      <View style={{ backgroundColor: theme.BackGround, flex: 1 }}>
         {loading && (
           <View style={{ flex: 1 }}>
-            <ActivityIndicator size="large" color={"#000"} />
-            <Text style={{ color:"#000", marginTop: 8,textAlign:"center" }}>Loading...</Text>
+            <ActivityIndicator size="large" color={theme.ModeText1} />
+            <Text style={{ color:theme.ModeText1, marginTop: 8,textAlign:"center" }}>Loading...</Text>
           </View>
         )}
 
@@ -55,7 +55,7 @@ export default function MyInformationPage() {
           <View
             style={{
               flexDirection: "row",
-              backgroundColor: "#000",
+              backgroundColor: theme.BackGround,
               paddingHorizontal: 20,
             }}
           >
@@ -65,9 +65,9 @@ export default function MyInformationPage() {
                 height: 120,
                 borderRadius: 30,
                 marginRight: 20,
-                backgroundColor: "#000",
+                backgroundColor: theme.BackGround,
                 borderWidth: 1,
-                borderColor: "#000",
+                borderColor: theme.LineColor,
                 justifyContent: "top",
                 alignItems: "top",
                 overflow: "hidden",
@@ -80,7 +80,7 @@ export default function MyInformationPage() {
                   resizeMode="cover"
                 />
               ) : (
-                <Text style={{ color: "#000" }}>No Image</Text>
+                <Text style={{ color:theme.BackGround }}>No Image</Text>
               )}
             </View>
 
@@ -90,7 +90,7 @@ export default function MyInformationPage() {
                   style={{
                     fontSize: 18,
                     fontWeight: "bold",
-                    color: "#000",
+                    color: theme.ModeText1,
                   }}
                 >
                   {userData.name || "No name available"}
@@ -107,7 +107,7 @@ export default function MyInformationPage() {
               <Text
                 style={{
                   fontSize: 16,
-                  color: "#000",
+                  color: theme.ModeText1,
                   opacity: 0.8,
                   fontWeight: "500",
                   marginTop: 4,
@@ -118,7 +118,7 @@ export default function MyInformationPage() {
               <Text
                 style={{
                   fontSize: 14,
-                  color: "#000",
+                  color: theme.ModeText1,
                   marginTop: 6,
                 }}
               >
@@ -128,11 +128,12 @@ export default function MyInformationPage() {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  backgroundColor: "#ffffff",
                   paddingHorizontal: 12,
                   paddingVertical: 6,
                   borderRadius: 8,
                   marginTop: 10,
+                  borderWidth:1,
+                  borderColor:theme.LineColor,
                   alignSelf: "flex-start",
                 }}
                 onPress={() =>
@@ -141,10 +142,10 @@ export default function MyInformationPage() {
                   })
                 }
               >
-                <Icon name="pencil-outline" size={16} color="black" />
+                <Icon name="pencil-outline" size={16} color={theme.Icon} />
                 <Text
                   style={{
-                    color: "#000",
+                    color: theme.ModeText1,
                     fontSize: 14,
                     fontWeight: "bold",
                     marginLeft: 6,

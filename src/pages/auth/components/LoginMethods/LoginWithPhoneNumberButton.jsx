@@ -14,7 +14,7 @@ const { theme } = useAppTheme();
       labelStyle={{
         fontSize: 15,
         fontWeight: "700",
-        color: theme.ModeText2,
+        color: "#000",
       }}
       icon={() => (
         <Image

@@ -7,17 +7,15 @@ import {
   Animated,
   TouchableOpacity,
   Text,
-  StyleSheet,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-
 import Page from "../../components/Page";
 import SendMessageField from "./components/SendMessageField";
 import ProfilePopup from "./components/ProfilePopUp";
 import Post from "./components/Post";
 import Message from "./components/Message";
-
+import { useAppTheme } from "../../../themeContext";
 import socket from "../../socket";
 import { getGroupMessagesMutation } from "../../api/chats/groupChats/getGroupMessagesMutation";
 import { useGroupPostExpressInterest } from "../../api/chats/groupChats/useGroupPostExpressInterest";
@@ -26,7 +24,7 @@ export default function GroupChat({ route }) {
   const navigation = useNavigation();
   const { GroupId } = route.params;
   const phone = useSelector((state) => state.user.phone);
-
+  const { theme } = useAppTheme();
   const { mutate: fetchMessages, data, isLoading } = getGroupMessagesMutation();
   const { mutateAsync: expressInterest } = useGroupPostExpressInterest();
 
@@ -49,7 +47,6 @@ export default function GroupChat({ route }) {
 
   useEffect(() => {
     if (!GroupId) return;
-
     if (!socket.connected) socket.connect();
     socket.emit("JoinGroupChat", GroupId);
 
@@ -81,14 +78,14 @@ export default function GroupChat({ route }) {
 
   useEffect(() => {
     if (allMessages.length === 0 || didInitialScroll.current === true) return;
-
     setTimeout(() => {
-      scrollToBottom(false); // no animation
+      scrollToBottom(false);
       didInitialScroll.current = true;
     }, 50);
   }, [allMessages]);
 
   const scrollToBottom = (animated = true) => {
+    if (!allMessages.length) return;
     flatListRef.current?.scrollToIndex({
       index: allMessages.length - 1,
       animated,
@@ -102,7 +99,6 @@ export default function GroupChat({ route }) {
     const { layoutMeasurement, contentOffset, contentSize } = e.nativeEvent;
     const bottomOffset =
       contentSize.height - layoutMeasurement.height - contentOffset.y;
-
     if (bottomOffset < 60) {
       setIsAtBottom(true);
       setNewMessageCount(0);
@@ -147,25 +143,15 @@ export default function GroupChat({ route }) {
     console.log("📤 Share Post ID:", post._id);
   };
 
-const handleChatPress = (chatData) => {
-  console.log("USErdata : ", chatData)
-  console.log("Phone :", phone)
-  // const phone = useSelector((state) => state.user.phone); // Your current phone
-  const opponent = chatData.find(user => user.phone !== phone);
-
-  console.log("📞 Opponent user:", opponent._id);
-
-  navigation.navigate("PersonalChat", {
-    opponentId:opponent._id, // ✅ Only sending the opponent
-  });
-};
-
+  const handleChatPress = (chatData) => {
+    const opponent = chatData.find((user) => user.phone !== phone);
+    navigation.navigate("PersonalChat", { opponentId: opponent._id });
+  };
 
   const closeModal = () => setVisibleProfileId(null);
 
   const renderItem = ({ item }) => {
     const isMe = item.createdBy?.phone?.toString() === phone?.toString();
-
     const onPressMessage = () => console.log("🧍 CreatedBy:", item.createdBy);
     const onProfilePress = () => setVisibleProfileId(item.createdBy?._id);
 
@@ -199,20 +185,38 @@ const handleChatPress = (chatData) => {
   return (
     <Page>
       {isLoading && (
-        <View style={styles.loadingContainer}>
+        <View
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: 0,
+            right: 0,
+            zIndex: 10,
+          }}
+        >
           <ActivityIndicator size="large" color="#999" />
         </View>
       )}
 
       <Animated.View
-        style={[styles.container, { paddingBottom: keyboardHeight }]}
+        style={{
+          flex: 1,
+          backgroundColor: "black",
+          justifyContent: "flex-end",
+          paddingBottom: keyboardHeight,
+        }}
       >
         <FlatList
           ref={flatListRef}
           data={allMessages}
           keyExtractor={(item) => item._id || Math.random().toString()}
           renderItem={renderItem}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={{
+            padding: 12,
+            backgroundColor: theme.BackGround,
+            flexGrow: 1,
+            justifyContent: "flex-end",
+          }}
           keyboardShouldPersistTaps="handled"
           initialNumToRender={20}
           onScroll={handleScroll}
@@ -228,10 +232,19 @@ const handleChatPress = (chatData) => {
 
         {newMessageCount > 0 && !isAtBottom && (
           <TouchableOpacity
-            style={styles.newMsgBanner}
+            style={{
+              position: "absolute",
+              bottom: 80,
+              alignSelf: "center",
+              backgroundColor: "#1E90FF",
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderRadius: 20,
+              zIndex: 5,
+            }}
             onPress={() => scrollToBottom()}
           >
-            <Text style={styles.newMsgText}>
+            <Text style={{ color: "#fff", fontWeight: "600" }}>
               ↓ {newMessageCount} New Message{newMessageCount > 1 ? "s" : ""}
             </Text>
           </TouchableOpacity>
@@ -249,38 +262,3 @@ const handleChatPress = (chatData) => {
     </Page>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "black",
-    justifyContent: "flex-end",
-  },
-  listContent: {
-    padding: 12,
-    backgroundColor: "black",
-    flexGrow: 1,
-    justifyContent: "flex-end",
-  },
-  loadingContainer: {
-    position: "absolute",
-    top: "50%",
-    left: 0,
-    right: 0,
-    zIndex: 10,
-  },
-  newMsgBanner: {
-    position: "absolute",
-    bottom: 80,
-    alignSelf: "center",
-    backgroundColor: "#1E90FF",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    zIndex: 5,
-  },
-  newMsgText: {
-    color: "#fff",
-    fontWeight: "600",
-  },
-});

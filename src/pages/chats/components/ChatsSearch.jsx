@@ -1,43 +1,46 @@
 import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useAppTheme } from '../../../../themeContext';
 
 export default function ChatsSearch({ searchText, setSearchText }) {
+  const { theme } = useAppTheme();
+
   return (
-    <View style={styles.container}>
-      <Ionicons name="search" size={20} color="#888" style={styles.icon} />
+    <View
+      style={{
+        backgroundColor: theme.BackGround,
+        borderWidth:1,
+        borderColor:theme.LineColor,
+        // opacity:0.35,
+        borderRadius: 12,
+        paddingHorizontal: 12,
+        marginHorizontal: 16,
+        marginBottom: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+    >
+      <Ionicons
+        name="search"
+        size={20}
+        color={theme.Icon}
+        style={{ marginRight: 8, opacity:0.4 }}
+      />
       <TextInput
-        style={styles.input}
+        style={{
+          flex: 1,
+          color: theme.ModeText1,
+          fontSize: 16,
+          paddingVertical: 10,
+        }}
         placeholder="Search by name"
-        placeholderTextColor="#aaa"
+        placeholderTextColor={theme.ModeText3}
         value={searchText}
         onChangeText={setSearchText}
-        autoCapitalize="none" // Optional: To prevent automatic capitalization
-        underlineColorAndroid="transparent" // Fix for Android focus color
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'rgba(60, 59, 59, 0.82)',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    marginHorizontal: 16,
-    marginBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  icon: {
-    marginRight: 8,
-  },
-  input: {
-    flex: 1,
-    color: '#fff',
-    fontSize: 16,
-    paddingVertical: 10,
-    borderWidth: 0, // Ensure no border is applied
-    outlineStyle: 'none', // Prevent the outline style
-  },
-});

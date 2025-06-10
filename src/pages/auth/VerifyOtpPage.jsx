@@ -21,14 +21,14 @@ import BackButton from "./components/Buttons/BackButton";
 import NextButton from "./components/Buttons/NextButton";
 import OtpVerification from "./components/InputVerification/OtpVerification";
 import VerifyOtpPageFooter from "./components/AuthFooter/VerifyOtpPageFooter";
-
+import { useAppTheme } from "../../../themeContext";
 export default function VerifyOtpPage() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
   const { phoneNumber, ccode } = route.params;
   const { width } = Dimensions.get("window");
-
+  const { theme } = useAppTheme();
   const [otpValue, setOtpValue] = useState(["", "", "", ""]);
   const [countdown, setCountdown] = useState(30);
 
@@ -116,7 +116,7 @@ export default function VerifyOtpPage() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#000" }}
+      style={{ flex: 1, backgroundColor: theme.BackGround }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
@@ -137,7 +137,7 @@ export default function VerifyOtpPage() {
               style={{
                 fontSize: width * 0.07,
                 fontWeight: "500",
-                color: "#000",
+                color: theme.ModeText1,
               }}
             >
               Verify Your Mobile Number
@@ -146,13 +146,13 @@ export default function VerifyOtpPage() {
               style={{
                 fontSize: 17,
                 fontWeight: "400",
-                color: "#000",
+                color: theme.ModeText3,
                 marginTop: 10,
               }}
             >
               Enter the code we’ve sent by text to{" "}
               <Text
-                style={{ fontWeight: "600", color: "#000" }}
+                style={{ fontWeight: "600", color: theme.SpecialText }}
               >
                 {ccode} {phoneNumber}
               </Text>

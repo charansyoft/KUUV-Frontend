@@ -4,7 +4,7 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  StyleSheet,
+  ScrollView,
 } from "react-native";
 import { useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,19 +14,18 @@ import dayjs from "dayjs";
 import Page from "../../components/Page";
 import SendMessageField from "./components/SendMessageField";
 import socket from "../../socket";
-
-// Import Paper components and Icon
+import { useAppTheme } from "../../../themeContext";
 import { TouchableRipple } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const BASE_URL = "http://192.168.29.75:3000";
 
 export default function PersonalChat() {
+  const { theme } = useAppTheme();
   const route = useRoute();
   const chatId = route.params?.ChatId;
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const userPhone = useSelector((state) => state.user.phone);
   const flatListRef = useRef(null);
   const [showDownArrow, setShowDownArrow] = useState(false);
@@ -106,13 +105,13 @@ export default function PersonalChat() {
 
   const renderItem = ({ item }) => {
     const isMe = item.createdBy?.phone === userPhone;
-    return <MessageItem message={item} isMe={isMe} />;
+    return <MessageItem message={item} isMe={isMe} theme={theme} />;
   };
 
   return (
-    <Page>
+    <Page >
       {loading ? (
-        <ActivityIndicator size="large" color="#4e9fff" style={{ marginTop: 20 }} />
+        <ActivityIndicator size="large" color="#fff" style={{ marginTop: 20 }} />
       ) : (
         <>
           <FlatList
@@ -123,125 +122,88 @@ export default function PersonalChat() {
             contentContainerStyle={{ paddingVertical: 10, paddingBottom: 0 }}
             onScroll={onScroll}
             scrollEventThrottle={16}
+            style={{backgroundColor:theme.BackGround}}
           />
 
- {showDownArrow && (
-  <TouchableRipple
-    onPress={() => {
-      flatListRef.current?.scrollToEnd({ animated: true });
-      setShowDownArrow(false);
-    }}
-    rippleColor="rgba(255, 255, 255, 0.3)"
-    style={styles.downArrowButton}
-    borderless
-  >
-    <MaterialIcons name="keyboard-arrow-down" size={32} color="#fff" />
-  </TouchableRipple>
-)}
-
+          {showDownArrow && (
+            <TouchableRipple
+              onPress={scrollToBottom}
+              rippleColor="#fff"
+              borderless
+              style={{
+                position: "absolute",
+                bottom: 95,
+                right: 16,
+                backgroundColor:theme.BackGround,
+                width: 70,
+                height: 50,
+                borderRadius: 26,
+                borderColor: theme.LineColor,
+                borderWidth: 0.8,
+                justifyContent: "center",
+                alignItems: "center",
+                shadowColor: theme.ModeText1,
+                shadowOpacity: 0.5,
+                shadowOffset: { width: 0, height: 4 },
+                shadowRadius: 8,
+                elevation: 8,
+              }}
+            >
+              <MaterialIcons name="keyboard-arrow-down" size={30} color={theme.Icon} />
+            </TouchableRipple>
+          )}
         </>
       )}
-
       <SendMessageField PersonalChatId={chatId} />
     </Page>
   );
 }
 
-function MessageItem({ message, isMe }) {
-  const { payload, createdAt, createdBy } = message;
+function MessageItem({ message, isMe, theme }) {
+  const { payload, createdAt } = message;
   const text = payload?.text || message.content || "";
   const time = dayjs(createdAt).format("h:mm A");
 
   return (
     <View
-      style={[
-        styles.messageContainer,
-        isMe ? styles.messageRight : styles.messageLeft,
-      ]}
+      style={{
+        marginVertical: 5,
+        marginHorizontal: 12,
+        maxWidth: "75%",
+        alignSelf: isMe ? "flex-end" : "flex-start",
+      }}
     >
-      <View style={[styles.bubble, isMe ? styles.bubbleRight : styles.bubbleLeft]}>
-        <Text style={[styles.messageText, isMe ? styles.textRight : styles.textLeft]}>
+      <View
+        style={{
+          borderRadius: 16,
+          paddingVertical: 10,
+          paddingHorizontal: 14,
+          backgroundColor: isMe ? theme.SpecialBackGround : "#e0e0e0",
+          borderBottomRightRadius: isMe ? 4 : 16,
+          borderBottomLeftRadius: !isMe ? 4 : 16,
+          
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 16,
+            lineHeight: 22,
+            color: isMe ? "rgb(0, 0, 0)" : "rgb(0, 0, 0)",
+          }}
+        >
           {text}
         </Text>
-        <Text style={[styles.timeText, isMe ? styles.timeRight : styles.timeLeft]}>
+        <Text
+          style={{
+            fontSize: 10,
+            marginTop: 6,
+            color: isMe ?"rgba(0, 0, 0, 0.50)" : "#888",
+            textAlign: isMe ? "right" : "left",
+          }}
+        >
           {time}
         </Text>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  messageContainer: {
-    marginVertical: 5,
-    marginHorizontal: 12,
-    maxWidth: "75%",
-  },
-  messageRight: {
-    alignSelf: "flex-end",
-  },
-  messageLeft: {
-    alignSelf: "flex-start",
-  },
-  bubble: {
-    borderRadius: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  bubbleRight: {
-    backgroundColor: "#B0B5FF",
-    borderBottomRightRadius: 4,
-  },
-  bubbleLeft: {
-    backgroundColor: "#2e2e2e",
-    borderBottomLeftRadius: 4,
-  },
-  messageText: {
-    fontSize: 16,
-    lineHeight: 22,
-  },
-  textRight: {
-    color: "#000",
-  },
-  textLeft: {
-    color: "#ddd",
-  },
-  timeText: {
-    fontSize: 10,
-    marginTop: 6,
-  },
-  timeRight: {
-    color: "#333",
-    textAlign: "right",
-  },
-  timeLeft: {
-    color: "#888",
-    textAlign: "left",
-  },
-downArrowButton: {
-  position: "absolute",
-  bottom:95,
-  right: 16,
-  backgroundColor: "#000",
-  width: 70,
-  height: 50,
-  borderRadius: 26,
-  borderColor:"#fff",
-  borderWidth:0.8,
-  justifyContent: "center",
-  alignItems: "center",
-  
-  // MUI style shadows
-  shadowColor: "#000",
-  shadowOpacity: 0.5,
-  shadowOffset: { width: 0, height: 4 },
-  shadowRadius: 8,
-  elevation: 8,
-},
-
-});

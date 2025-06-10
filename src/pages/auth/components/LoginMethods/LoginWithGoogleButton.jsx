@@ -1,16 +1,19 @@
 import React, { useState, useRef } from "react";
-import { Image, Animated, Vibration } from "react-native";
+import { Animated, Vibration } from "react-native";
 import { Button } from "react-native-paper";
+import { FontAwesome5 } from "@expo/vector-icons"; // ✅ Google icon
 import { useAppTheme } from "../../../../../themeContext";
+
 export default function LoginWithGoogleButton() {
   const [clicked, setClicked] = useState(false);
   const shakeAnim = useRef(new Animated.Value(0)).current;
-const { theme} = useAppTheme();
+  const { theme } = useAppTheme();
+
   const handlePress = () => {
     if (clicked) return;
 
     setClicked(true);
-    Vibration.vibrate(50); // Short error buzz
+    Vibration.vibrate(50); // Short feedback
 
     Animated.sequence([
       Animated.timing(shakeAnim, { toValue: 10, duration: 40, useNativeDriver: true }),
@@ -42,18 +45,20 @@ const { theme} = useAppTheme();
         style={{
           paddingVertical: 5,
           width: "100%",
-          borderColor: clicked ? "rgb(255,77,79)" : theme.LineColor, // red or light gray
+          borderColor: clicked ? "rgb(255,77,79)" : theme.LineColor,
           borderWidth,
           borderRadius,
-          backgroundColor: theme.BackGround, // optional black background for contrast
+          backgroundColor: theme.BackGround,
         }}
-        textColor={clicked ? "rgb(255,77,79)" : theme.ModeText1} // red or white text
+        textColor={clicked ? "rgb(255,77,79)" : theme.ModeText1}
         labelStyle={{ fontSize: 15 }}
         icon={() =>
           clicked ? null : (
-            <Image
-              source={require("../../../../assets/Google.png")}
-              style={{ width: 20, height: 20 }}
+            <FontAwesome5
+              name="google"
+              size={20}
+              color={theme.ModeText1}
+              style={{ marginRight: 6 }}
             />
           )
         }

@@ -1,158 +1,90 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useAppTheme } from "../../../../themeContext";
 
 export default function ChatsFilter({ setActiveFilter }) {
-  // Set initial active filter to "All"
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const { theme } = useAppTheme();
 
-  // Function to handle chip click
   const handleChipPress = (chip) => {
     console.log(`Selected filter: ${chip}`);
-    setSelectedFilter(chip); // Set the clicked chip as active
-    setActiveFilter(chip); // Pass the selected filter to parent
+    setSelectedFilter(chip);
+    setActiveFilter(chip);
   };
 
-  return (
-    <View style={styles.container}>
-      {/* Horizontal ScrollView for Chips */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.chipContainer}
-      >
-        {/* All Chip */}
-        <TouchableOpacity onPress={() => handleChipPress("All")}>
-          <View
-            style={[
-              styles.chip,
-              selectedFilter === "All" && styles.selectedChip, // Apply selected chip style
-            ]}
-          >
-            <Ionicons
-              name="star-outline"
-              size={18}
-              color={selectedFilter === "All" ? "#000" : "#fff"} // Change icon color if selected
-            />
-            <Text
-              style={[
-                styles.chipText,
-                selectedFilter === "All" && styles.selectedText, // Apply selected text style
-              ]}
-            >
-              All
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        {/* Fav Chip */}
-        {/* <TouchableOpacity onPress={() => handleChipPress("Fav")}>
-          <View
-            style={[
-              styles.chip,
-              selectedFilter === "Fav" && styles.selectedChip, // Apply selected chip style
-            ]}
-          >
-            <Ionicons
-              name="heart-outline"
-              size={18}
-              color={selectedFilter === "Fav" ? "#000" : "#fff"} // Change icon color if selected
-            />
-            <Text
-              style={[
-                styles.chipText,
-                selectedFilter === "Fav" && styles.selectedText, // Apply selected text style
-              ]}
-            >
-              Fav
-            </Text>
-          </View>
-        </TouchableOpacity> */}
-
-        {/* Important Chip */}
-        {/* <TouchableOpacity onPress={() => handleChipPress("Important")}>
-          <View
-            style={[
-              styles.chip,
-              selectedFilter === "Important" && styles.selectedChip, // Apply selected chip style
-            ]}
-          >
-            <Ionicons
-              name="alert-circle-outline"
-              size={18}
-              color={selectedFilter === "Important" ? "#000" : "#fff"} // Change icon color if selected
-            />
-            <Text
-              style={[
-                styles.chipText,
-                selectedFilter === "Important" && styles.selectedText, // Apply selected text style
-              ]}
-            >
-              Important
-            </Text>
-          </View>
-        </TouchableOpacity> */}
-
-        {/* Unread Chip */}
-        {/* <TouchableOpacity onPress={() => handleChipPress("Unread")}>
-          <View
-            style={[
-              styles.chip,
-              selectedFilter === "Unread" && styles.selectedChip, // Apply selected chip style
-            ]}
-          >
-            <Ionicons
-              name="ellipse-outline"
-              size={18}
-              color={selectedFilter === "Unread" ? "#000" : "#fff"} // Change icon color if selected
-            />
-            <Text
-              style={[
-                styles.chipText,
-                selectedFilter === "Unread" && styles.selectedText, // Apply selected text style
-              ]}
-            >
-              Unread
-            </Text>
-          </View>
-        </TouchableOpacity> */}
-      </ScrollView>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#000000", // Dark background for the entire row
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    marginBottom:14,
-  },
-  chipContainer: {
-    flexDirection: "row",
-  },
-  chip: {
+  const chipStyle = (chip) => ({
     marginRight: 15,
     flexDirection: "row",
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#ccc", // Light border for the chip
+    borderColor: selectedFilter === chip ? theme.SpecialBackGround : "#ccc",
+    backgroundColor: selectedFilter === chip ? theme.SpecialBackGround : "transparent",
     alignItems: "center",
-  },
-  selectedChip: {
-    backgroundColor: "#B0B5FF", // Background color when selected
-    borderColor: "#B0B5FF", // Border color when selected
-  },
-  chipText: {
-    fontWeight:"500",
+  });
+
+  const textStyle = (chip) => ({
+    fontWeight: "500",
     fontSize: 14,
-    color: "#fff", // Default white text for chip label
     marginLeft: 5,
-  },
-  selectedText: {
-    fontWeight:"500",
-    color: "#000", // Text color when selected
-  },
-});
+    color: selectedFilter === chip ? "#000" : theme.Icon,
+  });
+
+  const iconColor = (chip) =>
+    selectedFilter === chip ? "#000" : theme.Icon;
+
+  return (
+    <View
+      style={{
+        backgroundColor: theme.BackGround,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        marginBottom: 14,
+      }}
+    >
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {/* All */}
+        <TouchableOpacity onPress={() => handleChipPress("All")}>
+          <View style={chipStyle("All")}>
+            <Ionicons name="star-outline" size={18} color={iconColor("All")} />
+            <Text style={textStyle("All")}>All</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* Fav */}
+        <TouchableOpacity onPress={() => handleChipPress("Fav")}>
+          <View style={chipStyle("Fav")}>
+            <Ionicons name="heart-outline" size={18} color={iconColor("Fav")} />
+            <Text style={textStyle("Fav")}>Fav</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* Important */}
+        <TouchableOpacity onPress={() => handleChipPress("Important")}>
+          <View style={chipStyle("Important")}>
+            <Ionicons
+              name="alert-circle-outline"
+              size={18}
+              color={iconColor("Important")}
+            />
+            <Text style={textStyle("Important")}>Important</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* Unread */}
+        <TouchableOpacity onPress={() => handleChipPress("Unread")}>
+          <View style={chipStyle("Unread")}>
+            <Ionicons
+              name="ellipse-outline"
+              size={18}
+              color={iconColor("Unread")}
+            />
+            <Text style={textStyle("Unread")}>Unread</Text>
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
+}

@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 import { View } from "react-native";
 import TextField from "../../../../components/forms/TextField";
-
+import { useAppTheme } from "../../../../../themeContext";
 export default function OtpVerification({ otpArray, setOtpArray }) {
   const inputRefs = useRef([]);
-
+  const { theme } = useAppTheme();
   const handleChangeText = (value, index) => {
     if (!/^[0-9]?$/.test(value)) return;
 
@@ -43,12 +43,12 @@ export default function OtpVerification({ otpArray, setOtpArray }) {
             height: 60,
             borderRadius: 50,
             borderWidth: 1.2,
-            borderColor: "#000",
-            backgroundColor: "#000",
+            borderColor: theme.LineColor,
+            backgroundColor: theme.ModeText3,
             textAlign: "center",
             fontSize: 22,
             fontWeight: "500",
-            color: "#000",
+            color: theme.ModeText2,
           }}
           maxLength={1}
           keyboardType="numeric"

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { addAddress } from "../../../redux/UserSelectedAddress"; // Adjust import if needed
+import { useAppTheme } from "../../../../themeContext";
 
 export default function ContinueFooter({
   joinedCount,
@@ -16,7 +17,7 @@ export default function ContinueFooter({
 }) {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
+  const { theme } = useAppTheme();
   const phoneNumber = phone || useSelector((state) => state.user.phone);
 
   const handleContinue = async () => {
@@ -30,12 +31,23 @@ export default function ContinueFooter({
       (id) => !previouslyJoinedGroupIds.includes(id)
     );
 
-    if (newGroups.length === 0 && previouslyJoinedGroupIds.length > 0) {
-      // No new groups joined but user had previously joined groups
-      dispatch(addAddress({ stateName: state, city }));
-      navigation.navigate("home-stack", { screen: "home" });
-      return;
-    }
+if (newGroups.length === 0 && previouslyJoinedGroupIds.length > 0) {
+  // No new groups joined but user had previously joined groups
+  dispatch(addAddress({ stateName: state, city }));
+
+  navigation.reset({
+    index: 0,
+    routes: [
+      {
+        name: "home-stack",
+        params: { screen: "home" }, // optional if you want to land directly in "home"
+      },
+    ],
+  });
+
+  return;
+}
+
 
     // Else, update backend with new joined groups
     try {
@@ -69,7 +81,7 @@ export default function ContinueFooter({
   return (
     <TouchableOpacity
       style={{
-        backgroundColor: !isDisabled ? "#000" : "#000",
+backgroundColor: !isDisabled ? "#B0B5FF" : "#aaa",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import { useSelector } from "react-redux";
-
+import { useAppTheme } from "../../../../themeContext";
 export default function Post({
   item,
   isMe,
@@ -12,7 +12,7 @@ export default function Post({
 }) {
   const user = useSelector((state) => state.user);
   const isOwnPost = item?.createdBy?.phone === user?.phone;
-
+  const { theme } = useAppTheme();
   const profilePic =
     item.createdBy?.profilePic?.trim() !== ""
       ? item.createdBy.profilePic
@@ -51,7 +51,7 @@ export default function Post({
               borderRadius: 20,
               marginRight: 10,
               borderWidth: 1,
-              borderColor: "#ddd",
+              borderColor: "#000",
             }}
           />
         </TouchableOpacity>
@@ -67,10 +67,10 @@ export default function Post({
             borderRadius: 16,
             backgroundColor: "#fff",
             shadowColor: "#000",
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 5,
-            elevation: 3,
+            shadowOffset: { width: 10, height: 10 },
+            shadowOpacity: 1,
+            shadowRadius: 10,
+            elevation: 10,
           }}
           accessibilityRole="button"
           accessibilityLabel="View post details"
@@ -80,7 +80,7 @@ export default function Post({
             style={{
               fontWeight: "600",
               fontSize: 14,
-              color: "#5B4BFF",
+              color: "#000",
               marginBottom: 8,
             }}
           >
@@ -97,9 +97,11 @@ export default function Post({
               }}
               style={{
                 width: "100%",
-                height: 160,
+                height: 185,
                 borderRadius: 12,
-                backgroundColor: "#f0f0f0",
+                backgroundColor:"#fff",
+                borderWidth:1,
+                borderColor:theme.LineColor,
                 marginBottom: 10,
               }}
               resizeMode="contain"
@@ -113,7 +115,7 @@ export default function Post({
             style={{
               fontSize: 16,
               fontWeight: "bold",
-              color: "#222",
+              color: "#000",
               marginBottom: 4,
             }}
             accessibilityRole="header"
@@ -122,22 +124,22 @@ export default function Post({
             {item.title}
           </Text>
           <Text
-            style={{ fontSize: 14, color: "#555", marginBottom: 6 }}
+            style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.5)", marginBottom: 6 }}
             accessibilityLabel={`Description: ${item.description}`}
           >
             {item.description}
           </Text>
 
           {/* Price & Interest */}
-          <Text style={{ fontSize: 14, color: "#777", marginBottom: 4 }}>
-            💰{" "}
-            <Text style={{ fontWeight: "600", color: "#333" }}>
+          <Text style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.5)", marginBottom: 4 }}>
+            {/* 💰{" "} */}
+            <Text style={{ fontWeight: "600", color: "rgb(0, 0, 0)" }}>
               {item.price}
             </Text>{" "}
             / {item.period}
           </Text>
-          <Text style={{ fontSize: 12, color: "#999" }}>
-            ❤️ Interest: {expressedInterestCount}
+          <Text style={{ fontSize: 12, color: "rgba(0, 0, 0, 0.5)" }}>
+            INTEREST: {expressedInterestCount}
           </Text>
           {!isOwnPost && (
             <View style={{ flexDirection: "row", marginTop: 10 }}>
@@ -150,7 +152,7 @@ export default function Post({
                   }
                 }}
                 style={{
-                  backgroundColor: alreadyExpressed ? "#ccc" : "#5B4BFF",
+                  backgroundColor: alreadyExpressed ? "#fff" : "#5B4BFF",
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                   borderRadius: 12,
@@ -168,7 +170,8 @@ export default function Post({
                 <Text
                   style={{
                     color: alreadyExpressed ? "#888" : "#fff",
-                    fontWeight: "600",
+                    fontSize:15,
+                    fontWeight:"600"
                   }}
                 >
                   {alreadyExpressed ? "Interest Expressed" : "Express Interest"}
@@ -188,7 +191,7 @@ export default function Post({
                 accessibilityRole="button"
                 accessibilityLabel="Share this post"
               >
-                <Text style={{ color: "#333", fontWeight: "600" }}>
+                <Text style={{ color: "#000", fontWeight: "600", fontSize:15 }}>
                   Share Now
                 </Text>
               </TouchableOpacity>
@@ -200,7 +203,7 @@ export default function Post({
               fontSize: 12,
               color: "#999",
               textAlign: "right",
-              marginBottom: 8,
+              marginTop: 8,
             }}
             accessibilityLabel={`Last updated at ${formattedUpdatedAt}`}
           >

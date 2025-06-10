@@ -5,7 +5,7 @@ import { themes } from "./theme";
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState("dark");
+  const [currentTheme, setCurrentTheme] = useState("light");
 
   const changeTheme = (theme) => {
     if (themes[theme]) setCurrentTheme(theme);

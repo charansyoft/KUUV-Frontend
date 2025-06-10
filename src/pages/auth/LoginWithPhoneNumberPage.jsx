@@ -12,12 +12,15 @@ import useLoginMutation from "../../api/useLoginMutation";
 import NextButton from "./components/Buttons/NextButton";
 import BackButton from "./components/Buttons/BackButton";
 import NumberVerification from "./components/InputVerification/NumberVerification";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { useAppTheme } from "../../../themeContext"
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { useAppTheme } from "../../../themeContext";
 const { width, height } = Dimensions.get("window");
 
 export default function LoginWithPhoneNumberPage() {
-  const {theme } = useAppTheme();
+  const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
 
   const [selectedCountry, setSelectedCountry] = useState({
@@ -72,7 +75,9 @@ export default function LoginWithPhoneNumberPage() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.BackGround, padding: 20 }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.BackGround, padding: 20 }}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -85,7 +90,9 @@ export default function LoginWithPhoneNumberPage() {
         >
           <BackButton style={{ opacity: 0.6 }} />
 
-          <View style={{ padding: 5, marginTop: height * 0.05, width: width * 0.7 }}>
+          <View
+            style={{ padding: 5, marginTop: height * 0.05, width: width * 0.7 }}
+          >
             <Text
               style={{
                 fontSize: width * 0.07,
@@ -103,7 +110,7 @@ export default function LoginWithPhoneNumberPage() {
               }}
             >
               We protect our community by making sure everyone on{" "}
-              <Text style={{ color:theme.SpecialText }}>Kuuv</Text> is real.
+              <Text style={{ color: theme.SpecialText }}>Kuuv</Text> is real.
             </Text>
           </View>
 
@@ -139,7 +146,7 @@ export default function LoginWithPhoneNumberPage() {
               }}
             >
               We never share this with anyone and it won’t be your{" "}
-              <Text style={{ color: theme.ModeText1}}>{" "}Profile</Text>
+              <Text style={{ color: theme.ModeText1 }}>Profile</Text>
             </Text>
 
             <NextButton

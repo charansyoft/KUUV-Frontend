@@ -13,14 +13,14 @@ import { useSelector } from "react-redux";
 import ChatsFilter from "./components/ChatsFilter";
 import ChatsSearch from "./components/ChatsSearch";
 import { useGetChatsByPhoneMutation } from "../../api/chats/personalChats/useGetChatsByPhoneMutation.js";
-
+import { useAppTheme } from "../../../themeContext.jsx";
 export default function ChatsListPage({ navigation }) {
   const [activeFilter, setActiveFilter] = useState("All");
   const [searchText, setSearchText] = useState("");
   const [chatData, setChatData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
+  const { theme } = useAppTheme();
   const phone = useSelector((state) => state.user.phone);
   const route = useRoute();
 
@@ -98,7 +98,7 @@ export default function ChatsListPage({ navigation }) {
       <View
         style={{
           flex: 1,
-          backgroundColor: "#000",
+          backgroundColor: theme.BackGround,
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -112,7 +112,7 @@ export default function ChatsListPage({ navigation }) {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#000" }}>
+    <View style={{ flex: 1, backgroundColor: theme.BackGround }}>
       <FlatList
         data={filteredChats}
         keyExtractor={(item) => item.id}
@@ -121,7 +121,7 @@ export default function ChatsListPage({ navigation }) {
             refreshing={refreshing}
             onRefresh={onRefresh}
             tintColor="#4e9fff"
-            colors={["#4e9fff"]}
+            colors={["#000"]}
           />
         }
         ListHeaderComponent={
@@ -139,9 +139,8 @@ export default function ChatsListPage({ navigation }) {
               padding: 14,
               marginHorizontal: 15,
               borderWidth: 1,
-              borderColor: "rgba(255, 255, 255, 0.5)",
+              borderColor: theme.LineColor,
               marginBottom: 15,
-              backgroundColor: "rgba(255, 255, 255, 0.12)",
               borderRadius: 20,
             }}
           >
@@ -162,16 +161,14 @@ export default function ChatsListPage({ navigation }) {
                   height: 60,
                   borderRadius: 15,
                   marginRight: 15,
-                  backgroundColor: "#000",
                   justifyContent: "center",
                   alignItems: "center",
                   borderWidth: 1,
-                  borderColor: "#fff",
                 }}
               >
                 <Text
                   style={{
-                    color: "#fff",
+                    color: theme.ModeText1,
                     fontSize: 24,
                     fontWeight: "bold",
                   }}
@@ -186,13 +183,13 @@ export default function ChatsListPage({ navigation }) {
                 style={{
                   fontSize: 16,
                   fontWeight: "500",
-                  color: "#fff",
+                  color: theme.ModeText1,
                   marginBottom: 4,
                 }}
               >
                 {item.name}
               </Text>
-              <Text style={{ fontSize: 14, color: "rgba(255, 255, 255, 0.6)" }}>
+              <Text style={{ fontSize: 14, color: theme.ModeText3 }}>
                 {item.lastMessage}
               </Text>
             </View>
@@ -201,7 +198,7 @@ export default function ChatsListPage({ navigation }) {
               <Text
                 style={{
                   fontSize: 12,
-                  color: "rgba(255, 255, 255, 0.74)",
+                  color: theme.ModeText3,
                 }}
               >
                 {item.lastMessageTime}
@@ -210,7 +207,7 @@ export default function ChatsListPage({ navigation }) {
                 <View
                   style={{
                     marginTop: 6,
-                    backgroundColor: "rgb(1, 190, 20)",
+                    backgroundColor: "rgb(81, 254, 98)",
                     paddingHorizontal: 8,
                     paddingVertical: 2,
                     borderRadius: 12,

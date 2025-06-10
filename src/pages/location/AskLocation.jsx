@@ -7,11 +7,11 @@ import { handleLocationSelect } from "../../redux/locationSlice";
 import BackButton from "../auth/components/Buttons/BackButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { useAppTheme } from "../../../themeContext";
 export default function AskLocation() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
+  const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
 
   const [permissionDenied, setPermissionDenied] = useState(false);
@@ -88,14 +88,14 @@ export default function AskLocation() {
   return (
     <SafeAreaView
       edges={["top", "bottom"]}
-      style={{ flex: 1, backgroundColor: "#000", padding: 16 }}
+      style={{ flex: 1, backgroundColor: theme.BackGround, padding: 16 }}
     >
       <BackButton />
 
       <Text
         style={{
           fontSize: 35,
-          color: "#000",
+          color: theme.ModeText1,
           marginTop: "10%",
           marginBottom: "4%",
           marginLeft: "2%",
@@ -107,7 +107,7 @@ export default function AskLocation() {
       <Text
         style={{
           fontSize: 17,
-          color: "#000",
+          color: theme.ModeText3,
           width: "80%",
           lineHeight: 22,
           marginBottom: 10,
@@ -137,21 +137,14 @@ export default function AskLocation() {
           position: "absolute",
           bottom: insets.bottom, // just above safe area, fallback 10 if inset is 0
           right: 20,
-          backgroundColor: "rgba(255, 255, 255, 0.08)",
           paddingVertical: 14,
           paddingHorizontal: 26,
           borderRadius: 40,
           borderWidth: 1,
-          borderColor: "rgba(255, 255, 255, 0.1)",
-          shadowColor: "#00FFFF",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.6,
-          shadowRadius: 6,
-          elevation: 0.1,
         }}
         disabled={loading}
       >
-        <MaterialIcons name="my-location" size={28} color="#00FFFF" />
+        <MaterialIcons name="my-location" size={28} color={theme.Icon} />
       </TouchableOpacity>
     </SafeAreaView>
   );

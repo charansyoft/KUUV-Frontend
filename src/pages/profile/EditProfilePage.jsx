@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
-  StyleSheet,
   ScrollView,
   Alert,
   Platform,
@@ -15,8 +14,8 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import { useAppTheme } from "../../../themeContext";
 
-// For Web file input fallback
 const FileInput = ({ onFileSelected }) => {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -38,15 +37,14 @@ const FileInput = ({ onFileSelected }) => {
 
 const EditProfilePage = () => {
   const navigation = useNavigation();
-
+  const { theme } = useAppTheme();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null); // { uri, name, type } or File on web
+  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
     if (Platform.OS === "web") {
-      // Trigger hidden file input click on web
       document.getElementById("fileInput").click();
       return;
     }
@@ -75,12 +73,11 @@ const EditProfilePage = () => {
   };
 
   const handleFileSelectedWeb = (file) => {
-    // On web, file is a File object from input
     setImage({
       uri: URL.createObjectURL(file),
       name: file.name,
       type: file.type,
-      fileObject: file, // keep actual File for upload
+      fileObject: file,
     });
   };
 
@@ -98,14 +95,11 @@ const EditProfilePage = () => {
 
     try {
       const token = await AsyncStorage.getItem("authToken");
-
       const formData = new FormData();
 
       if (Platform.OS === "web") {
-        // For web use actual File object
         formData.append("profileImage", image.fileObject, image.name);
       } else {
-        // Mobile platforms: uri, name, type
         formData.append("profileImage", {
           uri: image.uri,
           name: "profile.jpg",
@@ -117,7 +111,7 @@ const EditProfilePage = () => {
       formData.append("description", description);
 
       const res = await axios.patch(
-        "http://192.168.29.75:3000/profile", // your backend URL
+        "http://192.168.29.75:3000/profile",
         formData,
         {
           headers: {
@@ -138,113 +132,100 @@ const EditProfilePage = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.heading}>Edit Profile</Text>
-
+    <ScrollView
+      contentContainerStyle={{
+        padding: 20,
+        backgroundColor: theme?.BackGround || "#121212",
+        flexGrow: 1,
+      }}
+    >
       <TextInput
-        style={styles.input}
+        style={{
+          borderRadius: 8,
+          padding: 12,
+          marginBottom: 16,
+          borderWidth: 1,
+          borderColor: theme.LineColor,
+          color: theme.ModeText1,
+        }}
         placeholder="Name"
-        placeholderTextColor="#bbb"
+        placeholderTextColor={theme?.ModeText3 || "#999"}
         value={name}
         onChangeText={setName}
         autoCapitalize="words"
       />
 
       <TextInput
-        style={[styles.input, { height: 100 }]}
+        style={{
+          borderRadius: 8,
+          padding: 12,
+          marginBottom: 16,
+          height: 100,
+          borderWidth: 1,
+          borderColor: theme.LineColor,
+          color:theme.ModeText1,
+        }}
         placeholder="Description"
-        placeholderTextColor="#bbb"
+        placeholderTextColor={theme?.ModeText3 || "#999"}
         value={description}
         onChangeText={setDescription}
         multiline
       />
 
-      {/* Web hidden file input */}
-      {Platform.OS === "web" && (
-        <FileInput onFileSelected={handleFileSelectedWeb} />
-      )}
+      {Platform.OS === "web" && <FileInput onFileSelected={handleFileSelectedWeb} />}
 
-      <TouchableOpacity onPress={pickImage} style={styles.imagePicker}>
-        <Text style={styles.imagePickerText}>Select Profile Image</Text>
+      <TouchableOpacity
+        onPress={pickImage}
+        style={{
+          backgroundColor: theme.ModeText3,
+          borderRadius: 8,
+          padding: 12,
+          alignItems: "center",
+          marginBottom: 16,
+          borderWidth: 1,
+          borderColor: theme.LineColor,
+        }}
+      >
+        <Text style={{ color: theme.ModeText2, fontWeight: "600" }}>
+          Select Profile Image
+        </Text>
       </TouchableOpacity>
 
       {image && (
         <Image
           source={{ uri: image.uri }}
-          style={styles.imagePreview}
+          style={{
+            width: "100%",
+            height: 200,
+            marginBottom: 16,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: theme.LineColor,
+          }}
           resizeMode="cover"
         />
       )}
 
       <TouchableOpacity
-        style={[styles.submitButton, loading && { backgroundColor: "#555" }]}
+        style={{
+          backgroundColor: loading ? "#555" : theme.ModeText1,
+          padding: 16,
+          borderRadius: 10,
+          alignItems: "center",
+        }}
         onPress={handleSubmit}
         disabled={loading}
       >
         {loading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color={theme.ModeText1} />
         ) : (
-          <Text style={styles.submitText}>Update Profile</Text>
+          <Text style={{ color: theme.ModeText2, fontSize: 18, fontWeight: "bold" }}>
+            Update Profile
+          </Text>
         )}
       </TouchableOpacity>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#121212",
-    flexGrow: 1,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#fff",
-  },
-  input: {
-    backgroundColor: "#1E1E1E",
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#333",
-    color: "#fff",
-  },
-  imagePicker: {
-    backgroundColor: "#333",
-    borderRadius: 8,
-    padding: 12,
-    alignItems: "center",
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#555",
-  },
-  imagePickerText: {
-    color: "#8AB4F8",
-    fontWeight: "600",
-  },
-  imagePreview: {
-    width: "100%",
-    height: 200,
-    marginBottom: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#555",
-  },
-  submitButton: {
-    backgroundColor: "#4A90E2",
-    padding: 16,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  submitText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
 
 export default EditProfilePage;

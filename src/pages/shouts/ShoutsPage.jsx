@@ -12,7 +12,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import useFetchNotifications from "../../api/shouts/useFetchNotifications";
 import NotificationPopUp from "./components/NotificationPopUp";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { useAppTheme } from "../../../themeContext";
 export default function ShoutsPage() {
   const { data, isLoading, error, refetch } = useFetchNotifications();
   const [visible, setVisible] = useState(false);
@@ -20,7 +20,7 @@ export default function ShoutsPage() {
   const [loading, setLoading] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [selectedNotif, setSelectedNotif] = useState(null);
-
+  const { theme } = useAppTheme();
   useEffect(() => {
     const loadInitialNotifications = async () => {
       setVisible(true);
@@ -70,7 +70,7 @@ export default function ShoutsPage() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "#000", paddingHorizontal: 10 }}
+      style={{ flex: 1, backgroundColor: theme.BackGround, paddingHorizontal: 10 }}
     >
       {visible && (
         <View>
@@ -78,14 +78,14 @@ export default function ShoutsPage() {
             <ActivityIndicator
               size="large"
               color="#BB86FC"
-              style={{ marginTop: 15 }}
+              style={{ marginTop: 0 }}
             />
           ) : error ? (
             <Text
               style={{
                 color: "#CF6679",
                 textAlign: "center",
-                marginTop: 20,
+                marginTop: 0,
               }}
             >
               Error loading notifications
@@ -99,6 +99,7 @@ export default function ShoutsPage() {
                   tintColor="#BB86FC"
                   colors={["#BB86FC"]}
                   progressBackgroundColor="#222"
+                  contentContainerStyle={{ paddingBottom: 100 }}
                 />
               }
             >
@@ -110,11 +111,11 @@ export default function ShoutsPage() {
                       flexDirection: "row",
                       alignItems: "center",
                       marginBottom: 10,
-                      backgroundColor: "#292929",
+                      backgroundColor: theme.ModeText2,
                       padding: 12,
                       borderRadius: 16,
                       borderWidth: 0.5,
-                      borderColor: "#ffffff30",
+                      borderColor: theme.LineColor,
                     }}
                     onPress={() => onNotifPress(notif)}
                   >
@@ -132,7 +133,7 @@ export default function ShoutsPage() {
                         style={{
                           fontWeight: "700",
                           fontSize: 16,
-                          color: "#E0E0E0",
+                          color: theme.ModeText1,
                         }}
                       >
                         {notif.fromUser.name}
@@ -140,7 +141,7 @@ export default function ShoutsPage() {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: "#B0B0B0",
+                          color: theme.ModeText1,
                           marginTop: 4,
                         }}
                       >
@@ -150,7 +151,7 @@ export default function ShoutsPage() {
                         <Text
                           style={{
                             fontSize: 12,
-                            color: "#888",
+                            color: theme.ModeText3,
                             marginTop: 4,
                             fontStyle: "italic",
                           }}
@@ -194,13 +195,12 @@ export default function ShoutsPage() {
           position: "absolute",
           bottom: 20,
           right: 20,
-          backgroundColor: "#000",
+          backgroundColor: theme.BackGround,
           paddingVertical: 15,
           paddingHorizontal: 15,
           borderRadius: 50,
           borderWidth: 1,
-          borderColor: "rgba(255, 255, 255, 0.4)",
-          zIndex: 20,
+          borderColor: theme.LineColor,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -209,9 +209,9 @@ export default function ShoutsPage() {
         activeOpacity={0.7}
       >
         {loading ? (
-          <ActivityIndicator size={24} color="#ffffff" />
+          <ActivityIndicator size={24} color={theme.Icon} />
         ) : (
-          <Icon name="refresh" size={24} color="#ffffff" />
+          <Icon name="refresh" size={24} color={theme.Icon} />
         )}
       </TouchableOpacity>
 
