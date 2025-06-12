@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import BASE_URL from "../../../config";
 
 const useGetJoinedGroupsByPhone = (phoneNumber) => {
   const [apiGroups, setApiGroups] = useState([]);
@@ -19,7 +20,7 @@ const useGetJoinedGroupsByPhone = (phoneNumber) => {
         }
 
         const response = await axios.post(
-          "http://192.168.29.75:3000/GetGroupsByPhone",
+          `${BASE_URL}/GetGroupsByPhone`,
           { phoneNumber },
           {
             headers: { Authorization: `Bearer ${token}` },

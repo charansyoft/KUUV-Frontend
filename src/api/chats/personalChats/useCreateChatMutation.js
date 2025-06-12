@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../../config";
 
 const createChat = async ({ opponentId, message = "Hello" }) => {
   const token = await AsyncStorage.getItem("authToken");
 
   const response = await axios.post(
-    "http://192.168.29.75:3000/chats",
+    `${BASE_URL}/chats`,
     {
       users: [opponentId], // Current user will be inferred from token
       lastMessage: { text: message, type: "msg" },

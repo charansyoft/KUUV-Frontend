@@ -1,6 +1,7 @@
 // src/api/chats/personalChats/patchMessagesSeen.js
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../../config";
 
 export const patchMessagesSeen = async (chatId, messageIds) => {
   try {
@@ -8,7 +9,7 @@ export const patchMessagesSeen = async (chatId, messageIds) => {
     if (!token) throw new Error("No token found");
 
     const response = await axios.patch(
-      `http://192.168.29.75:3000/chats/${chatId}/MessageSeen`,
+      `${BASE_URL}/chats/${chatId}/MessageSeen`,
       { messageIds },
       {
         headers: {

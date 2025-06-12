@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../config";
 
 export default function useFetchGroupsMutation(locationInfo, phone) {
   const [fetchedGroups, setFetchedGroups] = useState([]);
@@ -23,7 +24,7 @@ export default function useFetchGroupsMutation(locationInfo, phone) {
         const city = locationInfo.city;
 
         const response = await axios.get(
-          "http://192.168.29.75:3000/categories",
+          `${BASE_URL}/categories`,
           {
             params: { location: city, phone: phone },
             headers: {

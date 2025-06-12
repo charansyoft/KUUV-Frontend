@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import BASE_URL from "../../../config";
 
 const fetchNotifications = async () => {
   try {
     const token = await AsyncStorage.getItem("authToken");
     if (!token) throw new Error("Auth token not found");
 
-    const response = await axios.get("http://192.168.29.75:3000/notifications", {
+    const response = await axios.get(`${BASE_URL}/notifications`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     

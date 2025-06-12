@@ -3,6 +3,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
+import BASE_URL from "../../../../config";
 
 export const useGetGroupDetailsByGroupId = () => {
   // Retrieve the phone number from the Redux store
@@ -16,7 +17,7 @@ export const useGetGroupDetailsByGroupId = () => {
 
       // Send the POST request with the groupId and phone number in the request body
 const response = await axios.post(
-  `http://192.168.29.75:3000/groups/${GroupId}`,
+  `${BASE_URL}/groups/${GroupId}`,
   {}, // No request body
   {
     headers: {

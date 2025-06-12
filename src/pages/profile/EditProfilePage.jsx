@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { useAppTheme } from "../../../themeContext";
+import BASE_URL from "../../../config";
 
 const FileInput = ({ onFileSelected }) => {
   const handleFileChange = (e) => {
@@ -111,7 +112,7 @@ const EditProfilePage = () => {
       formData.append("description", description);
 
       const res = await axios.patch(
-        "http://192.168.29.75:3000/profile",
+        `${BASE_URL}/profile`,
         formData,
         {
           headers: {

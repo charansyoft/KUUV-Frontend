@@ -2,6 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BASE_URL from '../../../config';
 
 const fetchGroupsByCity = async ({ queryKey }) => {
   const [_key, city, phone] = queryKey;
@@ -10,7 +11,7 @@ const fetchGroupsByCity = async ({ queryKey }) => {
 
   const authToken = await AsyncStorage.getItem("authToken");
 
-  const response = await axios.get("http://192.168.29.75:3000/categories", {
+  const response = await axios.get(`${BASE_URL}/categories`, {
     params: { location: city, phone },
     headers: {
       Authorization: `Bearer ${authToken}`,

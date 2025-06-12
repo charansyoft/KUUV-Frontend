@@ -2,6 +2,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation } from "@tanstack/react-query";
+import BASE_URL from "../../../../config";
 
 export const getGroupMessagesMutation = () => {
   return useMutation({
@@ -9,7 +10,7 @@ export const getGroupMessagesMutation = () => {
       const token = await AsyncStorage.getItem("authToken");
 
       const response = await axios.get(
-        `http://192.168.29.75:3000/groups/${GroupId}/messages`,
+        `${BASE_URL}/groups/${GroupId}/messages`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

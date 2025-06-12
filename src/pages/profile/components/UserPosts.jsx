@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useAppTheme } from "../../../../themeContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../../config";
 export function useFetchUserPosts() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ export function useFetchUserPosts() {
       const token = await AsyncStorage.getItem("authToken");
       if (!token) throw new Error("No auth token found");
 
-      const response = await fetch("http://192.168.29.75:3000/GetUserPosts", {
+      const response = await fetch(`${BASE_URL}/GetUserPosts`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +91,7 @@ export default function UserPosts() {
           >
             {post.image ? (
               <Image
-                source={{ uri: `http://192.168.29.75:3000/uploads/${post.image}` }}
+                source={{ uri: `${BASE_URL}/uploads/${post.image}` }}
                 style={{
                   width: "100%",
                   height: 180,

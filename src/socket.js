@@ -1,6 +1,7 @@
 // src/utils/socket.js
 import { io } from "socket.io-client";
+import BASE_URL from "../config";
 
-const socket = io("http://192.168.29.75:3000"); // Change to your backend URL
+const socket = io(`${BASE_URL}`); // Change to your backend URL
 
 export default socket;

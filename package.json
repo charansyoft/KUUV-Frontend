@@ -2,6 +2,7 @@
   "name": "worke_client",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -35,25 +36,27 @@
     "babel-runtime": "^6.26.0",
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.12.2",
-    "expo": "53.0.9",
-    "expo-blur": "~14.1.4",
+    "expo": "^53.0.0",
+    "expo-blur": "~14.1.5",
+    "expo-dev-client": "~5.2.0",
     "expo-document-picker": "~13.1.5",
     "expo-file-system": "~18.1.10",
     "expo-font": "~13.3.1",
     "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.5",
     "expo-location": "~18.1.5",
-    "expo-splash-screen": "~0.30.8",
+    "expo-notifications": "~0.31.3",
+    "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
-    "expo-video": "~2.1.9",
+    "expo-video": "~2.2.1",
     "formik": "^2.4.6",
     "html-entities": "^2.5.2",
     "hugeicons-react": "^0.3.0",
-    "lucide-react-native": "^0.479.0",
+    "lucide-react-native": "0.513.0",
     "prop-types": "^15.8.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-native": "0.79.2",
+    "react-native": "0.79.3",
     "react-native-calendars": "^1.1307.0",
     "react-native-country-codes-picker": "^2.3.5",
     "react-native-element-dropdown": "^2.12.2",
@@ -75,7 +78,7 @@
     "react-native-reanimated-carousel": "^3.5.1",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "5.4.0",
-    "react-native-screens": "~4.10.0",
+    "react-native-screens": "~4.11.1",
     "react-native-svg": "15.11.2",
     "react-native-svg-transformer": "^1.5.0",
     "react-native-tab-view": "^4.0.9",
@@ -84,8 +87,8 @@
     "react-native-ui-datepicker": "^3.0.5",
     "react-native-vector-icons": "^10.2.0",
     "react-native-video": "^6.8.2",
-    "react-native-web": "0.20.0",
-    "react-query": "^3.39.3",
+    "react-native-web": "^0.20.0",
+    "react-query": "3.39.3",
     "react-razorpay": "^3.0.1",
     "react-redux": "^9.2.0",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
@@ -93,15 +96,56 @@
     "sanitize-html": "^2.14.0",
     "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.17",
-    "undefined": "\\",
     "uuid": "^11.0.3",
     "yup": "^1.6.1",
-    "expo-notifications": "~0.31.2"
+    "expo-updates": "~0.28.14"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "babel-plugin-module-resolver": "^5.0.2",
+    "glob": "^7.2.3",
+    "metro": "^0.82.0",
     "metro-react-native-babel-transformer": "^0.77.0"
   },
-  "private": true
+  "expo": {
+    "owner": "charan1911",
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": {
+            "Inter_18pt-Regular": "./assets/fonts/Inter_18pt-Regular.ttf",
+            "Inter_18pt-Medium": "./assets/fonts/Inter_18pt-Medium.ttf",
+            "Inter_18pt-Light": "./assets/fonts/Inter_18pt-Light.ttf",
+            "Inter_18pt-Thin": "./assets/fonts/Inter_18pt-Thin.ttf"
+          }
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ],
+    "doctor": {
+      "reactNativeDirectoryCheck": {
+        "listUnknownPackages": false,
+        "exclude": [
+          "react-native-read-more-text",
+          "react-native-fs",
+          "reanimated-bottom-sheet",
+          "styled-components",
+          "uuid",
+          "react-query",
+          "prop-types",
+          "react-native-keyboard-aware-scroll-view",
+          "react-native-country-codes-picker",
+          "react-native-element-dropdown",
+          "react-native-emoji-selector",
+          "react-native-toast-notifications"
+        ]
+      }
+    }
+  }
 }

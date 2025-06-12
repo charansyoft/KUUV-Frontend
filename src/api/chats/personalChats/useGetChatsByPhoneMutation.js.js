@@ -2,11 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useSelector } from "react-redux";
-
+import BASE_URL from "../../../../config"
 const fetchChatsByPhone = async (phone) => {
   const token = await AsyncStorage.getItem("authToken");
 
-  const response = await axios.get("http://192.168.29.75:3000/chats", {
+  const response = await axios.get(`${BASE_URL}/chats`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute } from "@react-navigation/native";
+import BASE_URL from "../../../../config";
 
 const { width } = Dimensions.get("window");
 
@@ -66,7 +67,7 @@ useEffect(() => {
       }
 
       const response = await fetch(
-        `http://192.168.29.75:3000/users/${userId}`,
+        `${BASE_URL}/users/${userId}`,
         {
           method: "GET",
           headers: {

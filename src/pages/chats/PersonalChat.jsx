@@ -17,8 +17,8 @@ import socket from "../../socket";
 import { useAppTheme } from "../../../themeContext";
 import { TouchableRipple } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import BASE_URL from "../../../config";
 
-const BASE_URL = "http://192.168.29.75:3000";
 
 export default function PersonalChat() {
   const { theme } = useAppTheme();

@@ -5,6 +5,10 @@ import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAppTheme } from "../../../../themeContext";
+import BASE_URL from "../../../../config"
+
+
+
 export default function PersonalChatHeader() {
   const route = useRoute();
   const opponent = route.params?.opponentId;
@@ -36,7 +40,7 @@ export default function PersonalChatHeader() {
         const token = await AsyncStorage.getItem("authToken");
         if (!token || !opponent) return;
 
-        const response = await axios.get(`http://192.168.29.75:3000/users/${opponent}`, {
+        const response = await axios.get(`${BASE_URL}/users/${opponent}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

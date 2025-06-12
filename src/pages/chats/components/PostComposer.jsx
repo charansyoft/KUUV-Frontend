@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useAppTheme } from "../../../../themeContext"
+import BASE_URL from "../../../../config";
 const { width } = Dimensions.get("window");
 
 const PostComposer = () => {
@@ -70,7 +71,7 @@ const PostComposer = () => {
 
     try {
       const res = await axios.post(
-        `http://192.168.29.75:3000/PostInGroupChats?GroupId=${GroupId}`,
+        `${BASE_URL}/PostInGroupChats?GroupId=${GroupId}`,
         formData,
         {
           headers: {

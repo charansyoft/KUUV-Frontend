@@ -15,6 +15,7 @@ import {
 import { Chip } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useSelector } from "react-redux";
+import BASE_URL from "../config";
 
 export default function ShoutsPage() {
   const [posts, setPosts] = useState([]);
@@ -28,7 +29,7 @@ export default function ShoutsPage() {
   const fetchPosts = async () => {
     try {
       const token = await AsyncStorage.getItem("authToken");
-      const response = await axios.get("http://192.168.29.75:3000/posts", {
+      const response = await axios.get(`${BASE_URL}/posts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPosts(response.data?.data || []);
@@ -83,7 +84,7 @@ export default function ShoutsPage() {
     try {
       const token = await AsyncStorage.getItem("authToken");
       const response = await axios.post(
-        `http://192.168.29.75:3000/posts/${postId}/like`,
+        `${BASE_URL}/posts/${postId}/like`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

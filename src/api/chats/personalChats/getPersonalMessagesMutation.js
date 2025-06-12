@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../../config";
 
 
 export const getPersonalMessagesMutation = async (chatId) => {
@@ -13,7 +14,7 @@ export const getPersonalMessagesMutation = async (chatId) => {
     }
 
     const response = await axios.get(
-      `http://192.168.29.75:3000/chats/${chatId}/messages`,
+      `${BASE_URL}/chats/${chatId}/messages`,
       {
         headers: {
           Authorization: `Bearer ${authToken}`,

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { addAddress } from "../../../redux/UserSelectedAddress"; // Adjust import if needed
 import { useAppTheme } from "../../../../themeContext";
-
+import BASE_URL from "../../../../config"
 export default function ContinueFooter({
   joinedCount,
   joinedGroups,
@@ -57,7 +57,7 @@ if (newGroups.length === 0 && previouslyJoinedGroupIds.length > 0) {
       };
 
       const response = await axios.post(
-        "http://192.168.29.75:3000/api/groups/joinedGroupsByPhone",
+        `${BASE_URL}/api/groups/joinedGroupsByPhone`,
         data
       );
 

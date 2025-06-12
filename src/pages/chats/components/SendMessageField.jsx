@@ -11,6 +11,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useAppTheme } from "../../../../themeContext";
+import BASE_URL from "../../../../config";
 
 const SendMessageField = ({ PersonalChatId, GroupChatId }) => {
   const [message, setMessage] = useState("");
@@ -53,9 +54,9 @@ const SendMessageField = ({ PersonalChatId, GroupChatId }) => {
 
   const handleSend = () => {
     if (GroupChatId) {
-      sendMessage(`http://192.168.29.75:3000/groups/${GroupChatId}/messages`);
+      sendMessage(`${BASE_URL}/groups/${GroupChatId}/messages`);
     } else if (PersonalChatId) {
-      sendMessage(`http://192.168.29.75:3000/chats/${PersonalChatId}/messages`);
+      sendMessage(`${BASE_URL}/chats/${PersonalChatId}/messages`);
     } else {
       console.warn("No chat ID provided");
     }

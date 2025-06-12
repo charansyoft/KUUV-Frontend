@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"; // Import TanStack Query
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../../config";
 
 // Mutation function to create a new post
 const addPost = async (postData) => {
@@ -13,7 +14,7 @@ const addPost = async (postData) => {
   }
 
   // Send a POST request to the server to create a new post
-  const response = await axios.post("http://192.168.29.75:3000/posts", postData, {
+  const response = await axios.post(`${BASE_URL}/posts`, postData, {
     headers: {
       Authorization: `Bearer ${token}`, // Attach the token in headers
     },

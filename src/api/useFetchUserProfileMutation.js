@@ -1,12 +1,13 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import BASE_URL from "../../config";
 
 export const useFetchUserProfileMutation = async () => {
   try {
     const token = await AsyncStorage.getItem("authToken");
     if (!token) throw new Error("No authentication token found");
 
-    const response = await axios.get("http://192.168.29.75:3000/users/profile", {
+    const response = await axios.get(`${BASE_URL}/users/profile`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
