@@ -2,7 +2,7 @@ name: Expo Frontend CI/CD
 
 on:
   push:
-    branches: [main] # or change to your actual branch name
+    branches: [main] # change this if your branch is different
 
 jobs:
   build:
@@ -19,7 +19,6 @@ jobs:
 
       - name: 💾 Install Dependencies
         run: npm install --legacy-peer-deps
-
 
       - name: 🚀 Install EAS CLI
         run: npm install -g eas-cli
