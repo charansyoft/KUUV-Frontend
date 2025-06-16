@@ -59,13 +59,11 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "ff33b1bd-1039-44dd-84a4-156862baa5ff"
+        "projectId": "6b4db035-b903-40c8-91dd-7a8371826498"
       }
     },
     "owner": "charan1911",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/ff33b1bd-1039-44dd-84a4-156862baa5ff"
     }
