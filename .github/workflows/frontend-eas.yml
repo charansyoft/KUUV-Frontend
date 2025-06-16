@@ -2,7 +2,7 @@ name: Expo Frontend CI/CD
 
 on:
   push:
-    branches: [main] # or change to your actual branch
+    branches: [main]
 
 jobs:
   build:
@@ -23,9 +23,5 @@ jobs:
       - name: 🚀 Install EAS CLI
         run: npm install -g eas-cli
 
-      - name: 🔐 Authenticate with EAS
-        run: eas whoami --token ${{ secrets.EAS_ACCESS_TOKEN }}
-
       - name: 🏗️ Run Expo Build (Android)
         run: eas build --platform android --profile preview --non-interactive --token ${{ secrets.EAS_ACCESS_TOKEN }}
-
