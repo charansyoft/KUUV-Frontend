@@ -9,17 +9,21 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
+import { useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useAppTheme } from "../../../../themeContext"
 import BASE_URL from "../../../../config";
+import { useSelector } from "react-redux";
 const { width } = Dimensions.get("window");
-
+import socket from "../../../socket";
 const PostComposer = () => {
   const navigation = useNavigation();
   const route = useRoute();
+      const phone = useSelector((state) => state.user.phone); // ✅ get user's phone
+
   const { GroupId } = route.params;
   const { theme } = useAppTheme();
   const [name, setName] = useState("");
@@ -28,7 +32,17 @@ const PostComposer = () => {
   const [price, setPrice] = useState(0);
   const [period, setPeriod] = useState("day");
   const [loading, setLoading] = useState(false);
+useEffect(() => {
+  if (!socket.connected) socket.connect();
 
+  console.log("📡 Emitting registerUser with phone:", phone); // <- add this
+  socket.emit("registerUser", phone); // ✅ THIS IS CRUCIAL
+  socket.emit("JoinGroupChat", GroupId);
+
+  return () => {
+    socket.emit("LeaveGroupChat", GroupId);
+  };
+}, [GroupId, phone]);
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {

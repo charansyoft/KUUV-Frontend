@@ -1,13 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
+import * as Linking from "expo-linking";
 import { useDispatch } from "react-redux";
 import { handleLocationSelect } from "../../redux/locationSlice";
 import BackButton from "../auth/components/Buttons/BackButton";
 import { MaterialIcons } from "@expo/vector-icons";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { useAppTheme } from "../../../themeContext";
+
 export default function AskLocation() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -36,6 +47,18 @@ export default function AskLocation() {
       if (status !== "granted") {
         setPermissionDenied(true);
         setLoading(false);
+
+        Alert.alert(
+          "Location Permission Required",
+          "Please enable location permission in your phone's settings.",
+          [
+            { text: "Cancel", style: "cancel" },
+            {
+              text: "Open Settings",
+              onPress: () => Linking.openSettings(),
+            },
+          ]
+        );
         return;
       }
 
@@ -73,22 +96,33 @@ export default function AskLocation() {
         setPermissionDenied(true);
       }
     } catch (error) {
+      console.warn("Location fetch error:", error);
       setPermissionDenied(true);
     } finally {
       setLoading(false);
     }
   };
 
+  // ⏱️ Ask for permission after 2s
   useEffect(() => {
     if (!hasAskedOnce.current) {
-      fetchLocation(true);
+      const timeout = setTimeout(() => {
+        fetchLocation(true);
+      }, 2000);
+
+      return () => clearTimeout(timeout);
     }
   }, []);
 
   return (
     <SafeAreaView
       edges={["top", "bottom"]}
-      style={{ flex: 1, backgroundColor: theme.BackGround, padding: 16 }}
+      style={{
+        flex: 1,
+        backgroundColor: theme.BackGround,
+        padding: 16,
+        justifyContent: "flex-start",
+      }}
     >
       <BackButton />
 
@@ -111,6 +145,7 @@ export default function AskLocation() {
           width: "80%",
           lineHeight: 22,
           marginBottom: 10,
+          marginLeft: "2%",
         }}
       >
         We use your location to show you potential matches in your area.
@@ -127,24 +162,30 @@ export default function AskLocation() {
             borderRadius: 10,
           }}
         >
-          🚫 Location access was denied. Please enable it or tap below to retry.
+          🚫 Location access was denied. Tap below to retry or open settings.
         </Text>
       )}
 
       <TouchableOpacity
-        onPress={() => fetchLocation(false)}
+        onPress={() => fetchLocation(true)}
         style={{
           position: "absolute",
-          bottom: insets.bottom, // just above safe area, fallback 10 if inset is 0
+          bottom: insets.bottom + 20,
           right: 20,
           paddingVertical: 14,
           paddingHorizontal: 26,
           borderRadius: 40,
           borderWidth: 1,
+          borderColor: theme.LineColor,
+          backgroundColor: theme.ModeText3,
         }}
         disabled={loading}
       >
-        <MaterialIcons name="my-location" size={28} color={theme.Icon} />
+        {loading ? (
+          <ActivityIndicator size="small" color={theme.Icon} />
+        ) : (
+          <MaterialIcons name="my-location" size={28} color={theme.Icon} />
+        )}
       </TouchableOpacity>
     </SafeAreaView>
   );

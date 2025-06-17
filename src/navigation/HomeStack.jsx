@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"; // Changed
 import CustomHeader from "../components/header/CustomHeader";
 import ProfileStack from "./ProfileStack";
@@ -11,17 +11,36 @@ import ShoutsPage from "../pages/shouts/ShoutsPage";
 import ShoutsStack from "./ShoutsStack";
 import { useAppTheme } from "../../themeContext";
 const Tab = createMaterialTopTabNavigator(); // Changed
+import { useSelector } from "react-redux"; // ✅ for accessing phone
+import { useEffect } from "react";
+import socket from "../socket";
+
 
 export default function HomeStack() {
-const { theme } = useAppTheme();
+    const phone = useSelector((state) => state.user.phone); // ✅ get user's phone
+  
+  const { theme } = useAppTheme();
+  useEffect(() => {
+  if (!socket.connected) socket.connect();
+
+  console.log("📡 Emitting registerUser with phone:", phone); // <- add this
+  socket.emit("registerUser", phone); // ✅ THIS IS CRUCIAL
+
+
+}, [phone]);
   return (
     <Tab.Navigator
       initialRouteName="home"
+      sceneAnimationEnabled={false}
       tabBarPosition="bottom" // place tab bar at bottom with swipe enabled
       screenOptions={({ route }) => ({
         header: () => <CustomHeader route={route} />,
-        swipeEnabled: true, // enable swipe gestures
+        swipeEnabled: false, // enable swipe gestures
         tabBarShowLabel: true,
+        animationEnabled: false,
+        tabBarPressColor: "transparent", // 🚫 Removes ripple effect on press
+        tabBarPressOpacity: 1, // ✅ Makes press feel instant
+
         tabBarStyle: {
           backgroundColor: theme.BackGround,
           height: 110,
@@ -73,9 +92,7 @@ const { theme } = useAppTheme();
             <Icon
               name={iconName}
               size={25}
-              color={
-                focused ? theme.SpecialBackGround : theme.Icon
-              }
+              color={focused ? theme.SpecialBackGround : theme.Icon}
             />
           );
         },
@@ -83,11 +100,9 @@ const { theme } = useAppTheme();
           <Text
             style={{
               fontSize: 13,
-              color: focused
-                ? theme.SpecialBackGround
-                : theme.ModeText1,
+              color: focused ? theme.SpecialBackGround : theme.ModeText1,
               fontFamily: "System",
-              marginBottom:0,
+              marginBottom: 0,
             }}
           >
             {route.name.charAt(0).toUpperCase() + route.name.slice(1)}
@@ -100,15 +115,32 @@ const { theme } = useAppTheme();
       <Tab.Screen
         name="chats"
         component={ChatsStack}
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            navigation.navigate("chats", {
-              screen: "ChatsListPage",
-            });
-          },
-        })}
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? "ChatsListPage";
+          const hideTabScreens = [
+            "PersonalChat",
+            "GroupChat",
+            "PostComposer",
+            "ViewProfile",
+          ];
+
+          const shouldHideTabBar = hideTabScreens.includes(routeName);
+
+          return {
+            tabBarStyle: {
+              display: shouldHideTabBar ? "none" : "flex",
+              backgroundColor: theme.BackGround,
+              height: 110,
+              borderTopWidth: 0.2,
+              paddingTop: 5,
+              borderTopColor: theme.LineColor,
+              elevation: 5,
+            },
+          };
+        }}
       />
+
       <Tab.Screen name="profile" component={ProfileStack} />
     </Tab.Navigator>
   );

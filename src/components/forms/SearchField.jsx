@@ -18,10 +18,10 @@ export default function SearchField({
       style={{
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: theme.BackGround,
+        backgroundColor: "rgba(0, 0, 0, 0.05)",
         paddingHorizontal: 10,
         height: 45,
-        borderRadius: 15,
+        borderRadius: 55,
         ...containerStyle,
       }}
     >

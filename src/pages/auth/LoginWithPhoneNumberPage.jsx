@@ -128,7 +128,7 @@ export default function LoginWithPhoneNumberPage() {
           <View
             style={{
               position: "absolute",
-              bottom: keyboardVisible ? 10 : 0,
+              bottom: keyboardVisible ? 50 : 0,
               left: 0,
               right: 0,
               flexDirection: "row",

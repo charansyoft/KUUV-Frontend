@@ -18,6 +18,7 @@ function GroupItem({
 }) {
   const scaleAnim = useRef(new Animated.Value(isJoinedNow ? 1.08 : 1)).current;
   const { theme } = useAppTheme();
+
   useEffect(() => {
     Animated.timing(scaleAnim, {
       toValue: isJoinedNow ? 1.08 : 1,
@@ -43,7 +44,7 @@ function GroupItem({
           padding: 10,
           marginHorizontal: 10,
           borderRadius: 20,
-          borderWidth: isPreviouslyJoined ? 1 : 1,
+          borderWidth: 1,
           borderColor: theme.LineColor,
           backgroundColor: theme.BackGround,
         }}
@@ -70,11 +71,6 @@ function GroupItem({
               justifyContent: "center",
               alignItems: "center",
               marginRight: 16,
-              // shadowColor: "#0ff",
-              // shadowOffset: { width: 0, height: 2 },
-              // shadowOpacity: 0.6,
-              // shadowRadius: 6,
-              // elevation: 5,
             }}
           >
             <Text
@@ -128,10 +124,16 @@ function GroupItem({
           {isPreviouslyJoined && (
             <Text
               style={{
-                fontWeight: "700",
-                fontSize: 13,
-                letterSpacing: 0.7,
+                fontWeight: "600",
+                fontSize: 12,
+                letterSpacing: 0.5,
                 color: theme.SpecialText,
+                backgroundColor: `${theme.SpecialText}25`,
+                paddingVertical: 4,
+                paddingHorizontal: 10,
+                borderRadius: 20,
+                alignSelf: "flex-start",
+                overflow: "hidden",
               }}
             >
               Already Joined
@@ -143,7 +145,6 @@ function GroupItem({
                 fontWeight: "900",
                 fontSize: 13,
                 letterSpacing: 0.7,
-
                 color: theme.ModeText1,
               }}
             >
@@ -161,8 +162,6 @@ export default function ScrollContent({
   joinedGroups,
   handleJoin,
   initialsMap,
-  userId,
-  loggedInPhone,
   previouslyJoinedGroupIds,
 }) {
   const renderItem = ({ item }) => {
@@ -185,10 +184,7 @@ export default function ScrollContent({
       data={groups}
       keyExtractor={(item) => item._id}
       renderItem={renderItem}
-      contentContainerStyle={{
-        paddingBottom: 10,
-        // backgroundColor: "#000", // optional page bg
-      }}
+      contentContainerStyle={{ paddingBottom: 10 }}
       showsVerticalScrollIndicator={false}
     />
   );

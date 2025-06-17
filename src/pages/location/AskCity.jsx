@@ -5,65 +5,77 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons"; // Using Feather instead of MUI icons for React Native
+import { Feather } from "@expo/vector-icons";
 import { useAppTheme } from "../../../themeContext";
+
 const AskCity = ({ route }) => {
   const { theme } = useAppTheme();
   const { locationInfo } = route.params;
   const navigation = useNavigation();
+
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
   const [isStateFound, setIsStateFound] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const selectedLocation = useSelector(
-    (state) => state.location.selectedLocation
-  );
+  const [loading, setLoading] = useState(true);
+  const selectedLocation = useSelector((state) => state.location.selectedLocation);
 
+  // Fetch all Indian states (ADM1)
   useEffect(() => {
     const fetchStates = async () => {
       try {
-        const response = await fetch(
-          "http://api.geonames.org/searchJSON?country=IN&featureClass=A&featureCode=ADM1&maxRows=1000&username=gummadicharan37 "
+        const res = await fetch(
+          "http://api.geonames.org/searchJSON?country=IN&featureClass=A&featureCode=ADM1&maxRows=1000&username=gummadicharan37"
         );
-        const data = await response.json();
+        const data = await res.json();
         setStates(data.geonames || []);
-      } catch (error) {
-        console.error("Error fetching states:", error);
+      } catch (err) {
+        console.error("Error fetching states:", err);
       }
     };
+
     fetchStates();
   }, []);
 
+  // Fetch cities of a matched state
   const fetchCities = async (stateId) => {
     try {
-      const response = await fetch(
-        `http://api.geonames.org/childrenJSON?geonameId=${stateId}&username=gummadicharan37 `
+      setLoading(true);
+      const res = await fetch(
+        `http://api.geonames.org/childrenJSON?geonameId=${stateId}&username=gummadicharan37`
       );
-      const data = await response.json();
+      const data = await res.json();
       setCities(data.geonames || []);
       setFilteredCities(data.geonames || []);
-    } catch (error) {
-      console.error("Error fetching cities:", error);
+    } catch (err) {
+      console.error("Error fetching cities:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Match state and load cities
   useEffect(() => {
-    const stateName = locationInfo?.toLowerCase();
-    const matchedState = states.find(
-      (state) => state.name.toLowerCase() === stateName
-    );
-    if (matchedState) {
-      fetchCities(matchedState.geonameId);
+    if (!states.length || !locationInfo) return;
+
+    const stateName = locationInfo.toLowerCase();
+    const match = states.find((s) => s.name.toLowerCase() === stateName);
+
+    if (match) {
       setIsStateFound(true);
+      fetchCities(match.geonameId);
     } else {
       setIsStateFound(false);
+      setLoading(false);
     }
   }, [states, locationInfo]);
 
+  // Search filter
   const handleSearch = (text) => {
     setSearchTerm(text);
     if (text) {
@@ -76,45 +88,38 @@ const AskCity = ({ route }) => {
     }
   };
 
-  const handleCancelSearch = () => {
-    navigation.goBack();
-  };
+  const handleCancelSearch = () => navigation.goBack();
+
+  const normalize = (text) =>
+    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   return (
     <View
       style={{
         flex: 1,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        padding: 20,
-        paddingVertical:50,
-        paddingBottom:60,
+        paddingTop: 50,
+        paddingBottom: 60,
+        paddingHorizontal: 20,
         backgroundColor: theme.BackGround,
       }}
     >
-      {/* Search bar */}
+      {/* 🔍 Search Bar */}
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          width: "100%",
-          // backgroundColor:theme.ModeText3,
-          borderRadius: 20,
-          paddingHorizontal: 10,
-          paddingVertical: 5,
           marginBottom: 20,
         }}
       >
         <View
           style={{
+            flex: 1,
             flexDirection: "row",
             alignItems: "center",
             borderWidth: 1,
             borderColor: theme.LineColor,
             borderRadius: 20,
-            flex: 1,
-            paddingLeft: 10,
-            paddingRight: 10,
+            paddingHorizontal: 10,
             opacity: 0.6,
           }}
         >
@@ -123,11 +128,8 @@ const AskCity = ({ route }) => {
             style={{
               flex: 1,
               padding: 10,
-              color:theme.ModeText1,
               fontSize: 16,
-              outlineStyle: "none",
-              outlineColor: "transparent",
-              outlineWidth: 0,
+              color: theme.ModeText1,
             }}
             placeholder="Search for City"
             placeholderTextColor={theme.ModeText3}
@@ -142,76 +144,69 @@ const AskCity = ({ route }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Cities list */}
-      {isStateFound ? (
-        filteredCities.length > 0 ? (
-          <FlatList
-            style={{ width: "100%", marginTop: 0, padding: 0 }}
-            data={filteredCities}
-            keyExtractor={(item) => item.geonameId.toString()}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  const normalize = (text) =>
-                    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-                  const locationInfo = {
-                    state: normalize(item.adminName1),
-                    city: normalize(item.toponymName),
-                  };
-
-                  console.log("LocationInfo:", locationInfo);
-                  navigation.navigate("GroupSelection", { locationInfo });
-                }}
+      {/* 🔄 Loading */}
+      {loading ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={theme.Icon} />
+          <Text style={{ marginTop: 12, color: theme.ModeText3 }}>
+            Fetching cities...
+          </Text>
+        </View>
+      ) : !isStateFound ? (
+        <Text style={{ fontSize: 18, color: theme.ModeText1, marginTop: 20 }}>
+          ⚠️ State not found in the list
+        </Text>
+      ) : filteredCities.length === 0 ? (
+        <Text style={{ fontSize: 18, color: theme.ModeText1, marginTop: 20 }}>
+          😕 No cities found for this state
+        </Text>
+      ) : (
+        <FlatList
+          data={filteredCities}
+          keyExtractor={(item) => item.geonameId.toString()}
+          renderItem={({ item, index }) => (
+            <TouchableOpacity
+              onPress={() => {
+                const locationInfo = {
+                  state: normalize(item.adminName1),
+                  city: normalize(item.toponymName),
+                };
+                navigation.navigate("GroupSelection", { locationInfo });
+              }}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                paddingVertical: 12,
+                borderBottomWidth: index !== filteredCities.length - 1 ? 1 : 0,
+                borderBottomColor: theme.LineColor,
+              }}
+            >
+              <View
                 style={{
-                  width: "100%",
-                  flexDirection: "row",
+                  width: 30,
+                  height: 30,
+                  borderRadius: 50,
+                  backgroundColor: theme.BackGround,
+                  justifyContent: "center",
                   alignItems: "center",
-                  padding: 10,
-                  backgroundColor:theme.BackGround,
-                  marginBottom: 10,
-                  justifyContent: "space-between",
-                  borderBottomWidth:
-                    index === filteredCities.length - 1 ? 0 : 1,
-                  borderBottomColor: theme.LineColor,
+                  marginRight: 15,
                 }}
               >
-                <View
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 50,
-                    marginRight: 15,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: theme.BackGround,
-                  }}
-                >
-                  <Text style={{ paddingBottom: 5 }}>🇮🇳</Text>
-                </View>
-                <Text
-                  style={{
-                    color: theme.ModeText1,
-                    fontSize: 18,
-                    flex: 1,
-                    textAlign: "left",
-                  }}
-                >
-                  {item.name}
-                </Text>
-                <Feather name="chevron-right" size={22} color={theme.Icon} />
-              </TouchableOpacity>
-            )}
-          />
-        ) : (
-          <Text style={{ fontSize: 18, color:theme.ModeText1, marginTop: 20 }}>
-            No cities found
-          </Text>
-        )
-      ) : (
-        <Text style={{ fontSize: 18, color: theme.ModeText1, marginTop: 20 }}>
-          State not found in the list
-        </Text>
+                <Text style={{ paddingBottom: 5 }}>🇮🇳</Text>
+              </View>
+              <Text
+                style={{
+                  flex: 1,
+                  fontSize: 18,
+                  color: theme.ModeText1,
+                }}
+              >
+                {item.name}
+              </Text>
+              <Feather name="chevron-right" size={22} color={theme.Icon} />
+            </TouchableOpacity>
+          )}
+        />
       )}
     </View>
   );

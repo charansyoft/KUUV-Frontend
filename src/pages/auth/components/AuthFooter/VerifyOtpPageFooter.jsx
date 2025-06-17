@@ -11,34 +11,13 @@ export default function VerifyOtpPageFooter({
 }) {
   const footerAnim = useRef(new Animated.Value(0)).current;
   const { theme } = useAppTheme();
-  useEffect(() => {
-    const show = Keyboard.addListener("keyboardDidShow", (e) => {
-      Animated.timing(footerAnim, {
-        toValue: -e.endCoordinates.height + 20,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
-    });
 
-    const hide = Keyboard.addListener("keyboardDidHide", () => {
-      Animated.timing(footerAnim, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
-    });
-
-    return () => {
-      show.remove();
-      hide.remove();
-    };
-  }, []);
 
   return (
     <Animated.View
       style={{
         position: "absolute",
-        bottom: 75,
+        bottom:10,
         left: 20,
         right: 20,
         transform: [{ translateY: footerAnim }],

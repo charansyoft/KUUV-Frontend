@@ -11,15 +11,19 @@ import {
 } from 'react-native';
 import { useGetGroupDetailsByGroupId } from '../../api/chats/groupChats/getGroupDetailsByGroupIdMutation';
 import { useSelector } from 'react-redux';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 import { useLeaveGroupMutation } from '../../api/chats/groupChats/useLeaveGroupMutation';
 import { useAppTheme } from '../../../themeContext';
+import { useNavigation } from '@react-navigation/native';
+
 export default function GroupChatHeader({ GroupId }) {
   const { mutate, data, isLoading, isError, error } = useGetGroupDetailsByGroupId();
+  const { mutate: leaveGroup, isLoading: isLeaving } = useLeaveGroupMutation();
   const phone = useSelector((state) => state.user.phone);
-  const [showModal, setShowModal] = useState(false);
-const { mutate: leaveGroup, isLoading: isLeaving } = useLeaveGroupMutation();
   const { theme } = useAppTheme();
+  const navigation = useNavigation();
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     if (GroupId) {
       mutate({ GroupId });
@@ -29,7 +33,7 @@ const { mutate: leaveGroup, isLoading: isLeaving } = useLeaveGroupMutation();
   if (isLoading) {
     return (
       <View style={{ padding: 16 }}>
-        <ActivityIndicator color={"#000"} />
+        <ActivityIndicator color={'#000'} />
       </View>
     );
   }
@@ -47,29 +51,29 @@ const { mutate: leaveGroup, isLoading: isLeaving } = useLeaveGroupMutation();
   const group = data.data;
   const isJoined = group?.joinedUsers?.some((user) => user.phone === phone);
 
-const handleConfirmLeave = () => {
-  setShowModal(false);
-
-  leaveGroup(
-    { groupId: GroupId },
-    {
-      onSuccess: (data) => {
-        Alert.alert('Success', 'You left the group successfully.');
-        // Optional: Navigate or refresh
-      },
-      onError: (error) => {
-        Alert.alert('Error', error.message || 'Failed to leave group.');
-      },
-    }
-  );
-};
+  const handleConfirmLeave = () => {
+    setShowModal(false);
+    leaveGroup(
+      { groupId: GroupId },
+      {
+        onSuccess: () => {
+          Alert.alert('Success', 'You left the group successfully.');
+          // Optionally navigate away
+        },
+        onError: (error) => {
+          Alert.alert('Error', error.message || 'Failed to leave group.');
+        },
+      }
+    );
+  };
 
   return (
-    <View style={{ backgroundColor:theme.BackGround }}>
+    <View style={{ backgroundColor: theme.BackGround, paddingTop: 40 }}>
+
+      {/* Group Info Card */}
       <View
         style={{
           margin: 15,
-          marginTop: 50,
           padding: 10,
           borderWidth: 1,
           borderRadius: 15,
@@ -79,6 +83,12 @@ const handleConfirmLeave = () => {
           justifyContent: 'space-between',
         }}
       >
+              <TouchableOpacity
+        onPress={() => navigation.goBack()}
+style={{paddingRight:9}}
+      >
+        <Feather name="chevron-left" size={26} color={theme.ModeText1} />
+      </TouchableOpacity>
         {/* Group Info */}
         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
           {group?.image ? (
@@ -103,7 +113,7 @@ const handleConfirmLeave = () => {
                 marginRight: 12,
               }}
             >
-              <Text style={{ fontSize: 18, color: "#000" }}>?</Text>
+              <Text style={{ fontSize: 18, color: '#000' }}>?</Text>
             </View>
           )}
 
@@ -121,31 +131,14 @@ const handleConfirmLeave = () => {
               {group?.name || 'Group'}
             </Text>
 
-            <Text style={{ fontSize: 13, color:theme.ModeText1 }}>
+            <Text style={{ fontSize: 13, color: theme.ModeText1 }}>
               {group?.location} • {group?.joinedUsers?.length || 0} members
             </Text>
           </View>
         </View>
 
-        {/* Right Side Buttons */}
+        {/* Exit Button */}
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {/* {!isJoined && (
-            <TouchableOpacity
-              onPress={() => console.log('Join group clicked')}
-              style={{
-                backgroundColor: '#B0B5FF',
-                padding: 8,
-                borderRadius: 100,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 10,
-              }}
-            >
-              <MaterialIcons name="add" size={25} color="black" />
-            </TouchableOpacity>
-          )} */}
-
-          {/* Exit Button */}
           {isJoined && (
             <TouchableOpacity
               onPress={() => setShowModal(true)}
@@ -164,86 +157,96 @@ const handleConfirmLeave = () => {
       </View>
 
       {/* Leave Group Modal */}
-<Modal transparent visible={showModal} animationType="fade">
-  <View
-    style={{
-      flex: 1,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <View
-      style={{
-        width: '80%',
-        backgroundColor: '#fff',
-        borderRadius: 20,
-        padding: 20,
-        alignItems: 'center',
-        elevation: 10,
-      }}
-    >
-      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
-        Exit Group
-      </Text>
-
-      <Text style={{ fontSize: 16, textAlign: 'center', marginBottom: 8 }}>
-        Are you sure you want to exit the group "{group.name}"?
-      </Text>
-
-      {/* Info Message */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: '#E6ECFF', // light blue background
-          paddingVertical: 8,
-          paddingHorizontal: 12,
-          borderRadius: 10,
-          marginBottom: 20,
-          alignSelf: 'stretch',
-        }}
-      >
-        <MaterialIcons name="info-outline" size={20} color="#4B6FFF" style={{ marginRight: 8 }} />
-        <Text style={{ color: '#4B6FFF', fontSize: 14, flex: 1 }}>
-          Leaving the group will delete all messages and data.
-        </Text>
-      </View>
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-        <Pressable
-          onPress={() => setShowModal(false)}
+      <Modal transparent visible={showModal} animationType="fade">
+        <View
           style={{
             flex: 1,
-            marginRight: 10,
-            padding: 12,
-            borderRadius: 12,
-            borderWidth: 1,
-            borderColor: theme.LineColor,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Text style={{ fontSize: 16, color:theme.ModeText1 }}>Cancel</Text>
-        </Pressable>
+          <View
+            style={{
+              width: '80%',
+              backgroundColor: '#fff',
+              borderRadius: 20,
+              padding: 20,
+              alignItems: 'center',
+              elevation: 10,
+            }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+              Exit Group
+            </Text>
 
-        <Pressable
-          onPress={handleConfirmLeave}
-          style={{
-            flex: 1,
-            marginLeft: 10,
-            padding: 12,
-            borderRadius: 12,
-            backgroundColor: '#FF4D4D',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ fontSize: 16, color: 'white' }}>Confirm</Text>
-        </Pressable>
-      </View>
-    </View>
-  </View>
-</Modal>
+            <Text style={{ fontSize: 16, textAlign: 'center', marginBottom: 8 }}>
+              Are you sure you want to exit the group "{group.name}"?
+            </Text>
 
+            {/* Info Message */}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: '#E6ECFF',
+                paddingVertical: 8,
+                paddingHorizontal: 12,
+                borderRadius: 10,
+                marginBottom: 20,
+                alignSelf: 'stretch',
+              }}
+            >
+              <MaterialIcons
+                name="info-outline"
+                size={20}
+                color="#4B6FFF"
+                style={{ marginRight: 8 }}
+              />
+              <Text style={{ color: '#4B6FFF', fontSize: 14, flex: 1 }}>
+                Leaving the group will delete all messages and data.
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
+              <Pressable
+                onPress={() => setShowModal(false)}
+                style={{
+                  flex: 1,
+                  marginRight: 10,
+                  padding: 12,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: theme.LineColor,
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ fontSize: 16, color: theme.ModeText1 }}>Cancel</Text>
+              </Pressable>
+
+              <Pressable
+                onPress={handleConfirmLeave}
+                style={{
+                  flex: 1,
+                  marginLeft: 10,
+                  padding: 12,
+                  borderRadius: 12,
+                  backgroundColor: '#FF4D4D',
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ fontSize: 16, color: 'white' }}>Confirm</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
