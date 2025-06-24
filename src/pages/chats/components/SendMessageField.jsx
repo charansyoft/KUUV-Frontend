@@ -12,12 +12,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useAppTheme } from "../../../../themeContext";
 import BASE_URL from "../../../../config";
+import { EmojiPicker } from 'emoji-mart-native'
 
 const SendMessageField = ({ PersonalChatId, GroupChatId }) => {
   const [message, setMessage] = useState("");
   const navigation = useNavigation();
   const { theme } = useAppTheme();
   const type = "msg";
+const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const handleEmojiPress = () => {
     Alert.alert("Coming Soon", "Emoji picker is under development.");

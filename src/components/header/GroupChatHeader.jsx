@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,16 +8,17 @@ import {
   Alert,
   Modal,
   Pressable,
-} from 'react-native';
-import { useGetGroupDetailsByGroupId } from '../../api/chats/groupChats/getGroupDetailsByGroupIdMutation';
-import { useSelector } from 'react-redux';
-import { MaterialIcons, Feather } from '@expo/vector-icons';
-import { useLeaveGroupMutation } from '../../api/chats/groupChats/useLeaveGroupMutation';
-import { useAppTheme } from '../../../themeContext';
-import { useNavigation } from '@react-navigation/native';
+} from "react-native";
+import { useGetGroupDetailsByGroupId } from "../../api/chats/groupChats/getGroupDetailsByGroupIdMutation";
+import { useSelector } from "react-redux";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
+import { useLeaveGroupMutation } from "../../api/chats/groupChats/useLeaveGroupMutation";
+import { useAppTheme } from "../../../themeContext";
+import { useNavigation } from "@react-navigation/native";
 
 export default function GroupChatHeader({ GroupId }) {
-  const { mutate, data, isLoading, isError, error } = useGetGroupDetailsByGroupId();
+  const { mutate, data, isLoading, isError, error } =
+    useGetGroupDetailsByGroupId();
   const { mutate: leaveGroup, isLoading: isLeaving } = useLeaveGroupMutation();
   const phone = useSelector((state) => state.user.phone);
   const { theme } = useAppTheme();
@@ -33,7 +34,7 @@ export default function GroupChatHeader({ GroupId }) {
   if (isLoading) {
     return (
       <View style={{ padding: 16 }}>
-        <ActivityIndicator color={'#000'} />
+        <ActivityIndicator color={"#000"} />
       </View>
     );
   }
@@ -41,7 +42,7 @@ export default function GroupChatHeader({ GroupId }) {
   if (isError) {
     return (
       <View style={{ padding: 16 }}>
-        <Text style={{ color: 'red' }}>Error: {error?.message}</Text>
+        <Text style={{ color: "red" }}>Error: {error?.message}</Text>
       </View>
     );
   }
@@ -57,19 +58,18 @@ export default function GroupChatHeader({ GroupId }) {
       { groupId: GroupId },
       {
         onSuccess: () => {
-          Alert.alert('Success', 'You left the group successfully.');
+          Alert.alert("Success", "You left the group successfully.");
           // Optionally navigate away
         },
         onError: (error) => {
-          Alert.alert('Error', error.message || 'Failed to leave group.');
+          Alert.alert("Error", error.message || "Failed to leave group.");
         },
       }
     );
   };
 
   return (
-    <View style={{ backgroundColor: theme.BackGround, paddingTop: 40 }}>
-
+    <View style={{ backgroundColor: theme.BackGround}}>
       {/* Group Info Card */}
       <View
         style={{
@@ -78,19 +78,19 @@ export default function GroupChatHeader({ GroupId }) {
           borderWidth: 1,
           borderRadius: 15,
           borderColor: theme.LineColor,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-              <TouchableOpacity
-        onPress={() => navigation.goBack()}
-style={{paddingRight:9}}
-      >
-        <Feather name="chevron-left" size={26} color={theme.ModeText1} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{ paddingRight: 9 }}
+        >
+          <Feather name="chevron-left" size={26} color={theme.ModeText1} />
+        </TouchableOpacity>
         {/* Group Info */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
           {group?.image ? (
             <Image
               source={{ uri: group.image }}
@@ -107,13 +107,13 @@ style={{paddingRight:9}}
                 width: 48,
                 height: 48,
                 borderRadius: 12,
-                backgroundColor: '#ccc',
-                justifyContent: 'center',
-                alignItems: 'center',
+                backgroundColor: "#ccc",
+                justifyContent: "center",
+                alignItems: "center",
                 marginRight: 12,
               }}
             >
-              <Text style={{ fontSize: 18, color: '#000' }}>?</Text>
+              <Text style={{ fontSize: 18, color: "#000" }}>?</Text>
             </View>
           )}
 
@@ -121,14 +121,14 @@ style={{paddingRight:9}}
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: 'bold',
+                fontWeight: "bold",
                 color: theme.ModeText1,
                 marginBottom: 2,
               }}
               numberOfLines={1}
               ellipsizeMode="tail"
             >
-              {group?.name || 'Group'}
+              {group?.name || "Group"}
             </Text>
 
             <Text style={{ fontSize: 13, color: theme.ModeText1 }}>
@@ -138,16 +138,29 @@ style={{paddingRight:9}}
         </View>
 
         {/* Exit Button */}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {isJoined && (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {isJoined ? (
             <TouchableOpacity
               onPress={() => setShowModal(true)}
               style={{
                 backgroundColor: theme.Exit,
                 padding: 8,
                 borderRadius: 100,
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons name="exit-to-app" size={24} color="black" />
+            </TouchableOpacity>
+          ) : (
+                        <TouchableOpacity
+              onPress={() => setShowModal(true)}
+              style={{
+                backgroundColor: theme.Exit,
+                padding: 8,
+                borderRadius: 100,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <MaterialIcons name="exit-to-app" size={24} color="black" />
@@ -161,40 +174,44 @@ style={{paddingRight:9}}
         <View
           style={{
             flex: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <View
             style={{
-              width: '80%',
-              backgroundColor: '#fff',
+              width: "80%",
+              backgroundColor: "#fff",
               borderRadius: 20,
               padding: 20,
-              alignItems: 'center',
+              alignItems: "center",
               elevation: 10,
             }}
           >
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}
+            >
               Exit Group
             </Text>
 
-            <Text style={{ fontSize: 16, textAlign: 'center', marginBottom: 8 }}>
+            <Text
+              style={{ fontSize: 16, textAlign: "center", marginBottom: 8 }}
+            >
               Are you sure you want to exit the group "{group.name}"?
             </Text>
 
             {/* Info Message */}
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: '#E6ECFF',
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: "#E6ECFF",
                 paddingVertical: 8,
                 paddingHorizontal: 12,
                 borderRadius: 10,
                 marginBottom: 20,
-                alignSelf: 'stretch',
+                alignSelf: "stretch",
               }}
             >
               <MaterialIcons
@@ -203,16 +220,16 @@ style={{paddingRight:9}}
                 color="#4B6FFF"
                 style={{ marginRight: 8 }}
               />
-              <Text style={{ color: '#4B6FFF', fontSize: 14, flex: 1 }}>
+              <Text style={{ color: "#4B6FFF", fontSize: 14, flex: 1 }}>
                 Leaving the group will delete all messages and data.
               </Text>
             </View>
 
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                width: '100%',
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
               }}
             >
               <Pressable
@@ -224,10 +241,12 @@ style={{paddingRight:9}}
                   borderRadius: 12,
                   borderWidth: 1,
                   borderColor: theme.LineColor,
-                  alignItems: 'center',
+                  alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: 16, color: theme.ModeText1 }}>Cancel</Text>
+                <Text style={{ fontSize: 16, color: theme.ModeText1 }}>
+                  Cancel
+                </Text>
               </Pressable>
 
               <Pressable
@@ -237,11 +256,11 @@ style={{paddingRight:9}}
                   marginLeft: 10,
                   padding: 12,
                   borderRadius: 12,
-                  backgroundColor: '#FF4D4D',
-                  alignItems: 'center',
+                  backgroundColor: "#FF4D4D",
+                  alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: 16, color: 'white' }}>Confirm</Text>
+                <Text style={{ fontSize: 16, color: "white" }}>Confirm</Text>
               </Pressable>
             </View>
           </View>

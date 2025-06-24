@@ -8,7 +8,7 @@ export default function ShoutsHeader() {
   return (
     <View
       style={{
-        height: 100,
+        paddingVertical:20,
         backgroundColor: theme.BackGround,
         justifyContent: "center",     // vertical center
         alignItems: "center",         // horizontal center
@@ -21,8 +21,7 @@ export default function ShoutsHeader() {
           fontWeight: "bold",
           fontFamily: "Poppins",
           textAlign: "center", 
-          paddingTop:30,        // ensures horizontal text alignment if multiline
-        }}
+          }}
       >
         Shouts
       </Text>

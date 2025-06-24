@@ -11,9 +11,7 @@ export default function ChatsListHeader() {
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingTop: 50,
-        paddingBottom: 15,
+        padding:20,
         backgroundColor: theme.BackGround , // fallback if undefined
       }}
     >

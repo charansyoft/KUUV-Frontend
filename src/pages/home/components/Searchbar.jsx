@@ -4,7 +4,7 @@ import SearchField from '../../../components/forms/SearchField'; // Ensure this 
 
 const SearchBar = ({ value = '', onChangeText, placeholder }) => {
   return (
-    <View style={{ marginBottom: 5, paddingHorizontal: 15, paddingTop: 10 }}>
+    <View style={{ marginBottom: 5, paddingHorizontal: 15 }}>
       <SearchField
         value={value}
         onChangeText={onChangeText}

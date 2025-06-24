@@ -21,13 +21,10 @@ export default function HomeStack() {
   
   const { theme } = useAppTheme();
   useEffect(() => {
-  if (!socket.connected) socket.connect();
-
-  console.log("📡 Emitting registerUser with phone:", phone); // <- add this
-  socket.emit("registerUser", phone); // ✅ THIS IS CRUCIAL
-
-
-}, [phone]);
+    if (socket && phone) {
+      socket.emit("registerUser", phone); // ⬅️ Register on socket connect
+    }
+  }, [phone]);
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -43,9 +40,8 @@ export default function HomeStack() {
 
         tabBarStyle: {
           backgroundColor: theme.BackGround,
-          height: 110,
           borderTopWidth: 0.2,
-          paddingTop: 5,
+          paddingVertical: 2,
           borderTopColor: theme.LineColor,
           elevation: 5, // for shadow on Android
         },
@@ -131,11 +127,10 @@ export default function HomeStack() {
             tabBarStyle: {
               display: shouldHideTabBar ? "none" : "flex",
               backgroundColor: theme.BackGround,
-              height: 110,
               borderTopWidth: 0.2,
               paddingTop: 5,
               borderTopColor: theme.LineColor,
-              elevation: 5,
+              
             },
           };
         }}

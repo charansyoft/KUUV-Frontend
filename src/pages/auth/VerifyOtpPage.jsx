@@ -31,13 +31,14 @@ export default function VerifyOtpPage() {
   const { theme } = useAppTheme();
   const [otpValue, setOtpValue] = useState(["", "", "", ""]);
   const [countdown, setCountdown] = useState(30);
+const [keyboardOffset, setKeyboardOffset] = useState(0);
 
   const footerAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const show = Keyboard.addListener("keyboardDidShow", (e) => {
       Animated.timing(footerAnim, {
-        toValue: -e.endCoordinates.height + 20,
+        toValue: -e.endCoordinates.height,
         duration: 250,
         useNativeDriver: true,
       }).start();
@@ -163,13 +164,22 @@ export default function VerifyOtpPage() {
             <OtpVerification otpArray={otpValue} setOtpArray={setOtpValue} />
           </View>
 
-          {/* ✅ Animated Footer */}
-              <VerifyOtpPageFooter 
-                countdown={countdown}
-                onResend={handleResendOtp}
-                onVerify={handleVerifyOtp}
-                isButtonEnabled={isButtonEnabled}
-              />
+<Animated.View
+  style={{
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  }}
+>
+  <VerifyOtpPageFooter
+    countdown={countdown}
+    onResend={handleResendOtp}
+    onVerify={handleVerifyOtp}
+    isButtonEnabled={isButtonEnabled}
+  />
+</Animated.View>
+
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>

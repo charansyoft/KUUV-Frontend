@@ -6,7 +6,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootStack from "./navigation/RootStack";
 import store from "./redux/store";
 import { ThemeProvider, useAppTheme } from "../themeContext"; // relative path ok
-import ChatInput from "./pages/chats/components/SendMessageField";
 
 const queryClient = new QueryClient();
 

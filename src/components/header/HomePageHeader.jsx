@@ -9,10 +9,8 @@ export default function HomePageHeader() {
   return (
     <View
       style={{
-        height: 100,
-        paddingTop: 40,
+        padding:20,
         justifyContent: "center",
-        paddingHorizontal: 20,
         backgroundColor: theme.BackGround,
         borderBottomWidth: 0,
         borderBottomColor: theme.LineColor,

@@ -14,7 +14,7 @@ export default function ChatsFilter({ setActiveFilter }) {
   };
 
   const chipStyle = (chip) => ({
-    marginRight: 15,
+    marginRight: 10,
     flexDirection: "row",
     paddingVertical: 12,
     paddingHorizontal: 16,
@@ -40,7 +40,7 @@ export default function ChatsFilter({ setActiveFilter }) {
       style={{
         backgroundColor: theme.BackGround,
         paddingHorizontal: 10,
-        paddingVertical: 10,
+        paddingTop: 10,
         marginBottom: 14,
       }}
     >

@@ -96,10 +96,7 @@ const AskCity = ({ route }) => {
   return (
     <View
       style={{
-        flex: 1,
-        paddingTop: 50,
-        paddingBottom: 60,
-        paddingHorizontal: 20,
+        flex: 1,padding:20,
         backgroundColor: theme.BackGround,
       }}
     >

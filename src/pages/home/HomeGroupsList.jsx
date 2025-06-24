@@ -19,7 +19,6 @@ export default function HomeGroupsList() {
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.BackGround }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 0 }} // bottom padding so content doesn't hide behind footer
         >
           <SearchBar
             placeholder="Search"

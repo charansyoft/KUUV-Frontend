@@ -8,8 +8,6 @@ const Stack = createNativeStackNavigator();
 
 export default function GroupsStack() {
   const addresses = useSelector((state) => state.userSelectedAddress.addresses);
-  console.log("CHECK3");
-
   return (
     <Stack.Navigator>
       <Stack.Screen

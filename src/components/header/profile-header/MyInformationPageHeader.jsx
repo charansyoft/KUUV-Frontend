@@ -9,10 +9,7 @@ const ProfileHeader = () => {
   return (
     <View
       style={{
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 50,
-        paddingHorizontal: 20,
-        height: 110,
-        
+        padding: 20,
         backgroundColor: theme.BackGround,
         flexDirection: "row",
         alignItems: "center",

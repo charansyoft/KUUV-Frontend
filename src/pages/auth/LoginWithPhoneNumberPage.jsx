@@ -76,7 +76,11 @@ export default function LoginWithPhoneNumberPage() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: theme.BackGround, padding: 20 }}
+      style={{
+        padding: 20,
+        flex: 1,
+        backgroundColor: theme.BackGround,
+      }}
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -125,35 +129,32 @@ export default function LoginWithPhoneNumberPage() {
           />
 
           {/* Footer pinned to bottom, moves up 10px on keyboard show */}
-          <View
+        </View>
+        <View
+          style={{
+            marginBottom: keyboardVisible ? 5 : 0,
+            backgroundColor: "white",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
             style={{
-              position: "absolute",
-              bottom: keyboardVisible ? 50 : 0,
-              left: 0,
-              right: 0,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              paddingHorizontal: 0,
+              flex: 1,
+              color: theme.ModeText3,
+              fontSize: 13,
+              paddingRight: 60,
             }}
           >
-            <Text
-              style={{
-                flex: 1,
-                color: theme.ModeText3,
-                fontSize: 13,
-                paddingRight: 60,
-              }}
-            >
-              We never share this with anyone and it won’t be your{" "}
-              <Text style={{ color: theme.ModeText1 }}>Profile</Text>
-            </Text>
+            We never share this with anyone and it won’t be your{" "}
+            <Text style={{ color: theme.ModeText1 }}>Profile</Text>
+          </Text>
 
-            <NextButton
-              disabled={phoneNumber.length !== selectedCountry.length}
-              onPress={handleLogin}
-            />
-          </View>
+          <NextButton
+            disabled={phoneNumber.length !== selectedCountry.length}
+            onPress={handleLogin}
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
